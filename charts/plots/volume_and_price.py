@@ -94,13 +94,23 @@ class PriceAndVolume(QWidget):
         self.__volume_plot.showGrid(x=True, y=True)
         self.__volume_plot.getAxis('left').setVisible(False)
         self.__volume_plot.getAxis('right').setVisible(True)
+        self.__volume_plot.getAxis('bottom').setVisible(False)
+
+        self.__plot_OI = pg.PlotWidget()
+        self.__plot_OI.showGrid(x=False, y=True)
+        self.__plot_OI.getAxis('left').setVisible(False)
+        self.__plot_OI.getAxis('right').setVisible(True)
+        self.__plot_OI.setAxisItems({'bottom': DateAxisItem()})
+
 
         # Add plots to the layout
-        layout.addWidget(self.__price_plot, stretch=3)  # Price plot takes 75% of the space
+        layout.addWidget(self.__price_plot, stretch=2)  # Price plot takes 75% of the space
         layout.addWidget(self.__volume_plot, stretch=1)  # Volume plot takes 25% of the space
+        layout.addWidget(self.__plot_OI, stretch=1)
 
         # Link price and volume x-axis
         self.__price_plot.setXLink(self.__volume_plot)
+        self.__plot_OI.setXLink(self.__price_plot)
 
         # Plot volume histogram
         self.__plot_volume()
@@ -121,7 +131,10 @@ class PriceAndVolume(QWidget):
         self.__volume_plot.addItem(bargraph)
 
         # Set the x-axis to use DatetimeAxis
-        self.__volume_plot.setAxisItems({'bottom': DateAxisItem(orientation='bottom')})
+        #self.__volume_plot.setAxisItems({'bottom': DateAxisItem(orientation='bottom')})
 
         # Adjust the y-axis range for the volume plot
         self.__volume_plot.setYRange(0, max(y) * 1.1)  # Add 10% padding
+
+    def __plot_OI(self):
+        plot = pg.PlotWidget()

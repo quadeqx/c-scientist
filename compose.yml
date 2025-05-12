@@ -1,0 +1,11 @@
+services:
+  c-scientist:
+    build: .
+    container_name: c-scientist
+    volumes:
+      - .:/app
+    environment:
+      - DISPLAY=:0 
+    network_mode: host  
+    stdin_open: true
+    tty: true
