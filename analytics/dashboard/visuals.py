@@ -1,10 +1,13 @@
 import pyqtgraph as pg
+from pyqtgraph import DateAxisItem
 import PyQt5
+from PyQt5.QtCore import QDate, Qt
+from PyQt5.QtGui import QBrush, QColor, QPainter, QFont
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QTabWidget, QCalendarWidget, QGridLayout
 import pandas as pd
-from pyqtgraph import DateAxisItem
-
+from PyQt5.QtGui import QPainter, QBrush, QColor
 import inspect
+import sys
 
 class AnalysisWidgets(QWidget):
     def __init__(self):
@@ -81,12 +84,31 @@ class AnalysisWidgets(QWidget):
         middle.setStyleSheet("background-color: #3E3E3E;")
         middle.setLayout(mid_horiz)
 
-        calender = QCalendarWidget()
-        calender.setVerticalHeaderFormat(PyQt5.QtWidgets.QCalendarWidget.NoVerticalHeader) # Change NoverticalHeader to ISOWeekNumbers for week numbers
-        children = calender.findChildren(PyQt5.QtWidgets.QHeaderView)
-        for child in children:
-            print(f"found:\n{child}")
-        mid_horiz.addWidget(calender, stretch=1)
+
+        class CustomCalendar(QCalendarWidget):
+            def __init__(self):
+                super().__init__()
+                self.setVerticalHeaderFormat(QCalendarWidget.NoVerticalHeader)
+
+            def paintCell(self, painter: QPainter, rect, date: QDate):
+
+                # Call base implementation first to draw the default cell
+                super().paintCell(painter, rect, date)
+
+                # Custom paint logic for a specific date
+                if date == QDate(2025, 5, 13):
+                    painter.save()
+                    painter.setClipRect(rect, Qt.IntersectClip)
+                    painter.fillRect(rect, QColor(0, 255, 0, 100))
+                    painter.setPen(Qt.green)
+                    painter.setFont(QFont("Arial", 10, QFont.Normal))
+
+                    text_rect = rect.adjusted(0, 20, 0, 0)
+                    painter.drawText(text_rect, Qt.AlignHCenter | Qt.AlignBottom, "+ 2%")
+                    painter.restore()
+
+        calendar = CustomCalendar()
+        mid_horiz.addWidget(calendar, stretch=1)
 
         inner = pg.PlotWidget()
         inner.setStyleSheet("background-color: #3E3E3E;")
