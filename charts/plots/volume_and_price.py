@@ -100,7 +100,9 @@ class PriceAndVolume(QWidget):
         self.__plot_OI.showGrid(x=False, y=True)
         self.__plot_OI.getAxis('left').setVisible(False)
         self.__plot_OI.getAxis('right').setVisible(True)
+        self.__plot_OI.setXRange(7, 7*24)
         self.__plot_OI.setAxisItems({'bottom': DateAxisItem()})
+
 
 
         # Add plots to the layout

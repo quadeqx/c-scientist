@@ -16,8 +16,5 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 # Copy the rest of the application
 COPY . .
 
-# Optional: Ensure PyQt5 is installed
-RUN pip install PyQt5
-
 # Start the GUI app
-CMD ["python", "main.py"]
+CMD ["python3", "main.py"]
