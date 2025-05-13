@@ -123,37 +123,30 @@ class AnalysisWidgets(QWidget):
         inner = pg.PlotWidget()
         inner.setStyleSheet("background-color: #3E3E3E;")
 
-        # Create dotted crosshair lines
         vLine = pg.InfiniteLine(angle=90, movable=False, pen=pg.mkPen('white', width=1, style=Qt.DotLine))
         hLine = pg.InfiniteLine(angle=0, movable=False, pen=pg.mkPen('white', width=1, style=Qt.DotLine))
 
-        # Add the lines to the plot
         inner.addItem(vLine, ignoreBounds=True)
         inner.addItem(hLine, ignoreBounds=True)
 
-        # Function to update the crosshair position
         def mouseMoved(evt):
-            pos = evt  # Directly use the QPointF object
-            if inner.sceneBoundingRect().contains(pos):  # Check if the mouse is inside the plot area
-                mousePoint = inner.plotItem.vb.mapSceneToView(pos)  # Map scene position to plot coordinates
+            pos = evt
+            if inner.sceneBoundingRect().contains(pos):
+                mousePoint = inner.plotItem.vb.mapSceneToView(pos)
                 x = mousePoint.x()
                 y = mousePoint.y()
 
-                # Update crosshair positions
                 vLine.setPos(x)
                 hLine.setPos(y)
 
-                # Ensure lines are visible while cursor is inside the plot area
                 if not vLine.isVisible():
                     vLine.setVisible(True)
                     hLine.setVisible(True)
             else:
-                # Hide lines when the cursor leaves the plot area
                 if vLine.isVisible():
                     vLine.setVisible(False)
                     hLine.setVisible(False)
 
-        # Connect the signal to the mouseMoved function
         inner.scene().sigMouseMoved.connect(mouseMoved)
 
         inner.setMouseTracking(True)
