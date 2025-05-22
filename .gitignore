@@ -1,6 +1,6 @@
 .env
 .git
-.spyproject
 *__pycache__/*
 *.pyc
 *.pyo
+.spyproject
