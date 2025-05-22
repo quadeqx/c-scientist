@@ -1,15 +1,16 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QTabWidget, QWidget, QHBoxLayout, QPushButton, QVBoxLayout, QSizePolicy, QLabel
-from PyQt5.QtGui import QIcon, QPalette, QColor
-from PyQt5.QtCore import Qt
 import pandas as pd
-from charts.plots.volume_and_price import PriceAndVolume
-from analytics.dashboard.visuals import AnalysisWidgets
+from PyQt5.QtCore import Qt
 from chatbot.bot.chat import Chat
 from news.platform.begin import News
 from reviews.rating.begin import Reviews
+from PyQt5.QtGui import QIcon, QPalette, QColor
 from data.watchlists.list1 import WatchlistManager
 from authentication.welcome.splash import show_splash
+from analytics.dashboard.visuals import AnalysisWidgets
+from charts.plots.volume_and_price import PriceAndVolume
+from PyQt5.QtWidgets import QApplication, QMainWindow, QTabWidget, QWidget, QHBoxLayout, QPushButton, QVBoxLayout, QSizePolicy, QLabel
+
 
 class CryptoDashboard(QMainWindow):
     def __init__(self):
