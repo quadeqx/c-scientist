@@ -65,6 +65,6 @@ def show_splash(app, main_window_class):
         main_window.show()
         QTimer.singleShot(100, splash.close)
 
-    QTimer.singleShot(10000, show_main_window)
+    QTimer.singleShot(3000, show_main_window)
 
     return main_window
