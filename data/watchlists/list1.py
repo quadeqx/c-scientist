@@ -39,6 +39,30 @@ class WatchlistManager(QWidget):
         self.layout.addWidget(analytics, 1, 1)
 
 
+        dexchange = TableWidget(10, 1)
+        dexchange.setData(['BNB'])
+        dexchange.setHorizontalHeaderLabels(['Dex Exchange'])
+        dexchange.resizeColumnsToContents()
+        self.layout.addWidget(dexchange, 0, 2)
+
+
+        computing = TableWidget(10, 1)
+        computing.setData(['Sample'])
+        computing.setHorizontalHeaderLabels(['Computing & Infrastructure'])
+        computing.resizeColumnsToContents()
+        self.layout.addWidget(computing, 1, 2)
+
+
+        sports = TableWidget()
+        sports.setData(['Maclaren'])
+        sports.setHorizontalHeaderLabels(['Sports'])
+        sports.resizeColumnsToContents()
+        self.layout.addWidget(sports, 2, 1)
+
+
+
+
+
 
 
 
