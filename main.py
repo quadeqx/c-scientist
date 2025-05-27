@@ -1,6 +1,4 @@
 import sys
-import pandas as pd
-from PyQt5 import QtCore
 from PyQt5.QtCore import Qt, QTimer
 from chatbot.bot.chat import Chat
 from news.platform.begin import News
@@ -10,8 +8,8 @@ from data.watchlists.list1 import WatchlistManager
 from authentication.welcome.splash import show_splash
 from analytics.dashboard.visuals import AnalysisWidgets
 from charts.plots.volume_and_price import Candle
-from PyQt5.QtWidgets import QApplication, QMainWindow, QTabWidget, QWidget, QHBoxLayout, QPushButton, QVBoxLayout, QSizePolicy, QLabel
-from PyQt5 import QtWidgets, QtCore, QtGui
+from PyQt5.QtWidgets import QMainWindow, QTabWidget, QWidget, QHBoxLayout, QPushButton, QVBoxLayout, QSizePolicy, QLabel
+from PyQt5 import QtWidgets
 from data.coins.coin_data import BinanceClient
 
 class CryptoDashboard(QMainWindow):
@@ -190,20 +188,35 @@ class CryptoDashboard(QMainWindow):
         event.accept()
 
 if __name__ == "__main__":
-    app = QtWidgets.QApplication(sys.argv)
-    splash, parent = show_splash(app, CryptoDashboard)
-    splash.show()
+    if not QtWidgets.QApplication.instance():
+        app = QtWidgets.QApplication(sys.argv)
+    else:
+        app = QtWidgets.QApplication.instance()
 
+    print(f"Initial BinanceClient.done: {BinanceClient.done}")
+
+    splash, parent = show_splash(app, CryptoDashboard)
+
+    global shown
+    shown = False  # Prevent multiple shows
     def check_data_loaded():
+        global shown
         try:
-            if not BinanceClient.done:
-                QTimer.singleShot(10, check_data_loaded)
-            else:
+            print(f"Checking BinanceClient.done: {BinanceClient.done}")
+            if BinanceClient.done and not shown:
+                print("Data loaded, showing main window")
+                shown = True
                 parent.show()
-                QTimer.singleShot(5000, splash.close)
+                QTimer.singleShot(500, splash.close)
+            elif not shown:
+                print("Not yet")
+                QTimer.singleShot(100, check_data_loaded)
+                app.processEvents()
         except AttributeError:
             print("Error: BinanceClient.done not found")
-            QTimer.singleShot(100, check_data_loaded)
+            if not shown:
+                QTimer.singleShot(100, check_data_loaded)
+                app.processEvents()
 
-    QTimer.singleShot(0, check_data_loaded)
+    QTimer.singleShot(100, check_data_loaded)
     sys.exit(app.exec_())
