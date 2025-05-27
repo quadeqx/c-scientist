@@ -1,6 +1,7 @@
 import sys
 import pandas as pd
-from PyQt5.QtCore import Qt
+from PyQt5 import QtCore
+from PyQt5.QtCore import Qt, QTimer
 from chatbot.bot.chat import Chat
 from news.platform.begin import News
 from reviews.rating.begin import Reviews
@@ -8,9 +9,10 @@ from PyQt5.QtGui import QIcon, QPalette, QColor
 from data.watchlists.list1 import WatchlistManager
 from authentication.welcome.splash import show_splash
 from analytics.dashboard.visuals import AnalysisWidgets
-from charts.plots.volume_and_price import PriceAndVolume
+from charts.plots.volume_and_price import Candle
 from PyQt5.QtWidgets import QApplication, QMainWindow, QTabWidget, QWidget, QHBoxLayout, QPushButton, QVBoxLayout, QSizePolicy, QLabel
-
+from PyQt5 import QtWidgets, QtCore, QtGui
+from data.coins.coin_data import BinanceClient
 
 class CryptoDashboard(QMainWindow):
     def __init__(self):
@@ -19,7 +21,7 @@ class CryptoDashboard(QMainWindow):
         # Remove default title bar
         self.setWindowFlags(Qt.FramelessWindowHint)
 
-        self.df = pd.read_csv('data/BTCUSDT-2024-MAR.csv')
+
 
         self.setWindowTitle("Crypto Dashboard")
         self.setWindowIcon(QIcon('favicon.ico'))
@@ -39,7 +41,7 @@ class CryptoDashboard(QMainWindow):
 
         self.tab.tabBar().hide()
 
-        self.chart = PriceAndVolume()
+        self.chart = Candle()
         self.analysis = AnalysisWidgets()
         self.chat = Chat()
         self.news = News()
@@ -72,7 +74,7 @@ class CryptoDashboard(QMainWindow):
 
         left_spacer = QWidget()
         left_layout = QVBoxLayout(left_spacer)
-        left_label = QLabel("Quadeqx")
+        left_label = QLabel("Username")
         left_layout.addWidget(left_label)
         left_spacer.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         header_layout.addWidget(left_spacer)
@@ -187,7 +189,21 @@ class CryptoDashboard(QMainWindow):
         self.dragging = False
         event.accept()
 
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    window = show_splash(app, CryptoDashboard)
+if __name__ == "__main__":
+    app = QtWidgets.QApplication(sys.argv)
+    splash, parent = show_splash(app, CryptoDashboard)
+    splash.show()
+
+    def check_data_loaded():
+        try:
+            if not BinanceClient.done:
+                QTimer.singleShot(10, check_data_loaded)
+            else:
+                parent.show()
+                QTimer.singleShot(5000, splash.close)
+        except AttributeError:
+            print("Error: BinanceClient.done not found")
+            QTimer.singleShot(100, check_data_loaded)
+
+    QTimer.singleShot(0, check_data_loaded)
     sys.exit(app.exec_())
