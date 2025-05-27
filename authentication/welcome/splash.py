@@ -1,6 +1,6 @@
-from PyQt5.QtWidgets import QSplashScreen, QLabel, QVBoxLayout, QWidget
+from PyQt5.QtWidgets import QSplashScreen, QVBoxLayout, QWidget
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QPixmap, QMovie
+from PyQt5.QtGui import QPixmap
 
 class SplashScreen(QSplashScreen):
     def __init__(self, pixmap):
@@ -27,7 +27,10 @@ def show_splash(app, main_window_class):
 
     splash = SplashScreen(pixmap)
     splash.show()
-    #app.processEvents()
+    app.processEvents()
+    import time
+    time.sleep(0.01)  # 10ms to ensure splash screen renders
+    app.processEvents()
 
     main_window = main_window_class()
 

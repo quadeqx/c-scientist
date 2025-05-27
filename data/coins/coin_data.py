@@ -95,17 +95,6 @@ class BinanceClient:
             }
             for candle in structured
         ]
-
+        BinanceClient.done = True
         return converted
-    done = True
 
-
-
-
-
-# Example usage
-if __name__ == "__main__":
-    client = BinanceClient()
-    data = client.get_uiklines("BTCUSDT", "1h", 5)
-    for candle in data:
-        print(candle, "\n\n")

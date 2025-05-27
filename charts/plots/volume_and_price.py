@@ -1,5 +1,4 @@
 from PyQt5 import QtWidgets, QtCore, QtGui
-from PyQt5.QtWidgets import QWidget, QVBoxLayout
 import pyqtgraph as pg
 from datetime import datetime
 import traceback
