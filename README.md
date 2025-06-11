@@ -63,7 +63,7 @@ c-scientist/
 4. **Run the Application**
 
    ```bash
-   python main.py
+   python3 main.py
    ```
 
 ## 🐳 Docker Deployment
@@ -74,10 +74,8 @@ For containerized deployment, refer to the [Docker Setup Guide](README.Docker.md
 
 - **Programming Language**: Python 3
 - **GUI Framework**: PyQt
-- **Data Visualization**: Matplotlib, Plotly
-- **Authentication**: JWT, OAuth
-- **Database**: SQLite
-- **APIs**: CoinGecko, NewsAPI
+- **Data Visualization**: pyqtgraph
+- **APIs**: Binance, Bybit
 
 ## 🧑‍💻 Contributing
 
