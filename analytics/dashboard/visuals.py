@@ -1,13 +1,16 @@
 import pyqtgraph as pg
-from pyqtgraph import DateAxisItem
+from pyqtgraph import DateAxisItem, PlotWidget, InfiniteLine
 import PyQt5
-from PyQt5.QtCore import QDate, Qt
+from PyQt5.QtCore import QDate, Qt, QPointF
 from PyQt5.QtGui import QBrush, QColor, QPainter, QFont
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QTabWidget, QCalendarWidget, QGridLayout
 import pandas as pd
 from PyQt5.QtGui import QPainter, QBrush, QColor
 import inspect
 import sys
+from .. import CustomPlotWidget, CrosshairHandler
+
+
 
 class AnalysisWidgets(QWidget):
     def __init__(self):
@@ -23,11 +26,14 @@ class AnalysisWidgets(QWidget):
         upper.setStyleSheet("background-color: #3E3E3E;")
         upper.setLayout(horiz)
 
-        portfolio = pg.PlotWidget()
-        horiz.addWidget(portfolio, stretch=1)
+        self.portfolio = CustomPlotWidget()
+        self.cross = CrosshairHandler(self.portfolio)
+        horiz.addWidget(self.portfolio, stretch=1)
 
-        by_coin = pg.PlotWidget()
-        horiz.addWidget(by_coin, stretch=1)
+
+        self.by_coin = CustomPlotWidget()
+        self.cross2 = CrosshairHandler(self.by_coin)
+        horiz.addWidget(self.by_coin, stretch=1)
 
         key_metrics = QWidget()
 
@@ -111,48 +117,10 @@ class AnalysisWidgets(QWidget):
         calendar = CustomCalendar()
         mid_horiz.addWidget(calendar, stretch=1)
 
-        inner = pg.PlotWidget()
-        inner.setStyleSheet("background-color: #3E3E3E;")
 
-        # Create and add crosshair lines
-        vLine = pg.InfiniteLine(angle=90, movable=False, pen=pg.mkPen('white', width=1, style=Qt.DotLine))
-        hLine = pg.InfiniteLine(angle=0, movable=False, pen=pg.mkPen('white', width=1, style=Qt.DotLine))
-
-
-
-        inner = pg.PlotWidget()
-        inner.setStyleSheet("background-color: #3E3E3E;")
-
-        vLine = pg.InfiniteLine(angle=90, movable=False, pen=pg.mkPen('white', width=1, style=Qt.DotLine))
-        hLine = pg.InfiniteLine(angle=0, movable=False, pen=pg.mkPen('white', width=1, style=Qt.DotLine))
-
-        inner.addItem(vLine, ignoreBounds=True)
-        inner.addItem(hLine, ignoreBounds=True)
-
-        def mouseMoved(evt):
-            pos = evt
-            if inner.sceneBoundingRect().contains(pos):
-                mousePoint = inner.plotItem.vb.mapSceneToView(pos)
-                x = mousePoint.x()
-                y = mousePoint.y()
-
-                vLine.setPos(x)
-                hLine.setPos(y)
-
-                if not vLine.isVisible():
-                    vLine.setVisible(True)
-                    hLine.setVisible(True)
-            else:
-                if vLine.isVisible():
-                    vLine.setVisible(False)
-                    hLine.setVisible(False)
-
-        inner.scene().sigMouseMoved.connect(mouseMoved)
-
-        inner.setMouseTracking(True)
-
-
-        mid_horiz.addWidget(inner, stretch=1)
+        self.inner = CustomPlotWidget()
+        self.cross3 = CrosshairHandler(self.inner)
+        mid_horiz.addWidget(self.inner, stretch=1)
 
         holdings_widget = QWidget()
         mid_horiz.addWidget(holdings_widget, stretch=1)
@@ -166,3 +134,5 @@ class AnalysisWidgets(QWidget):
         bottom.setHorizontalHeaderLabels(
             ["Date", "Ticker", "Entry Price", "Exit Price", "Leverage", "Position size", "Entry Fees", "Exit Fees", "Net Profit"])
         self.layout.addWidget(bottom, stretch=1)
+
+

@@ -10,7 +10,10 @@ from analytics.dashboard.visuals import AnalysisWidgets
 from charts.plots.volume_and_price import Candle
 from PyQt5.QtWidgets import QMainWindow, QTabWidget, QWidget, QHBoxLayout, QPushButton, QVBoxLayout, QSizePolicy, QLabel
 from PyQt5 import QtWidgets
-from data.coins.coin_data import BinanceClient
+from data import BinanceClient
+import requests
+
+new = requests
 
 class CryptoDashboard(QMainWindow):
     def __init__(self):
