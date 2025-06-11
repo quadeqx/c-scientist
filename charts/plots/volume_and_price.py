@@ -2,7 +2,8 @@ from PyQt5 import QtWidgets, QtCore, QtGui
 import pyqtgraph as pg
 from datetime import datetime
 import traceback
-from data.coins.coin_data import BinanceClient
+from data import BinanceClient
+from analytics import CrosshairHandler, CustomPlotWidget
 
 def ts_to_datetime(ms_timestamp):
     return datetime.fromtimestamp(ms_timestamp / 1000.0).isoformat()
@@ -64,7 +65,7 @@ class Candle(QtWidgets.QWidget):
         print(f"Creating MainWindow instance: {id(self)}")
         self.client = BinanceClient()
         self.layout = QtWidgets.QVBoxLayout()
-        self.plot_widget = pg.PlotWidget()
+        self.plot_widget = CustomPlotWidget()
         self.plot_widget.setAxisItems({'bottom': pg.DateAxisItem()})
         self.layout.addWidget(self.plot_widget)
 
@@ -82,7 +83,7 @@ class Candle(QtWidgets.QWidget):
             return
         try:
             print("Fetching data and plotting...")
-            print("Call stack:", traceback.format_stack())
+            #print("Call stack:", traceback.format_stack())
             raw_data = self.client.get_uiklines("BTCUSDT", "1m", limit=1000)
             if not raw_data:
                 print("No data to plot (API call skipped)")
@@ -92,6 +93,7 @@ class Candle(QtWidgets.QWidget):
                 print("No data received from Binance API")
                 return
             self.plot_widget.clear()  # Clear previous plot
+            self.cross4 = CrosshairHandler(self.plot_widget)
             candlestick_item = CandlestickItem(processed)
             self.plot_widget.addItem(candlestick_item)
             start = processed[0]['Date'] if len(processed) >= 10 else processed[0]['Date']
