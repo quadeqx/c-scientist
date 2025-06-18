@@ -14,15 +14,14 @@ class WatchlistManager(QWidget):
         self.setLayout(self.layout)
 
         payments = TableWidget(10, 6)
-        while True:
-            data0 = self.coinprice.getprices('payments')
-            processed = self.coinprice.prepare_table_data(data0)
-            payments.setData(processed)
-            payments.setHorizontalHeaderLabels(['Payments'])
-            payments.resizeColumnsToContents()
-            self.layout.addWidget(payments, 0, 0)
+        data0 = self.coinprice.getprices('payments')
+        processed = self.coinprice.prepare_table_data(data0)
+        payments.setData(processed)
+        payments.setHorizontalHeaderLabels(['Payments'])
+        payments.resizeColumnsToContents()
+        self.layout.addWidget(payments, 0, 0)
 
-"""
+
         ai = TableWidget(10, 1)
         data1 = self.coinprice.getprices('ai')
         ai.setData(self.coinprice.prepare_table_data(data1))
@@ -94,7 +93,7 @@ class WatchlistManager(QWidget):
         for idx, item in enumerate(lists):
             item.setItemDelegate(CenteredItemDelegate(item))
 
-    """
+
 
 
 
