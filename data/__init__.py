@@ -6,9 +6,9 @@ import time
 def log_request(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        print(f"[LOG] Calling: {func.__name__} with args: {args[1:]}, kwargs: {kwargs}\n\n")
+        #print(f"[LOG] Calling: {func.__name__} with args: {args[1:]}, kwargs: {kwargs}\n\n")
         result = func(*args, **kwargs)
-        print(f"[LOG] Result type: {type(result)}, length: {len(result) if hasattr(result, '__len__') else 'N/A'}\n\n")
+        #print(f"[LOG] Result type: {type(result)}, length: {len(result) if hasattr(result, '__len__') else 'N/A'}\n\n")
         return result
     return wrapper
 
@@ -58,20 +58,22 @@ def ts_to_datetime(ts):
 class BinanceClient:
     done = False
     BASE_URL = "https://api.binance.com"
-    UIKLINE_KEYS = [
-        "open_time", "open", "high", "low", "close", "volume",
-        "close_time", "quote_asset_volume", "number_of_trades",
-        "taker_buy_base", "taker_buy_quote", "ignore"
-    ]
+
 
     def __init__(self):
         self.session = requests.Session()
 
     @log_request
     @retry(times=3, delay=2)
-    @returns(list)
+    @returns(dict)
     @accepts(str, str, int)
     def get_uiklines(self, symbol, interval, limit=1000):
+        UIKLINE_KEYS = [
+            "open_time", "open", "high", "low", "close", "volume",
+            "close_time", "quote_asset_volume", "number_of_trades",
+            "taker_buy_base", "taker_buy_quote", "ignore"
+        ]
+
         url = f"{self.BASE_URL}/api/v3/uiKlines"
         params = {
             "symbol": symbol.upper(),
@@ -82,18 +84,8 @@ class BinanceClient:
         response.raise_for_status()
         raw_data = response.json()
 
-        # Convert list of lists to list of dicts
-        structured = [dict(zip(self.UIKLINE_KEYS, row)) for row in raw_data]
+        processed = dict(zip(UIKLINE_KEYS, raw_data[0]))
 
-        # Convert timestamps to ISO format
-        converted = [
-            {
-                **candle,
-                "open_time": ts_to_datetime(candle["open_time"]),
-                "close_time": ts_to_datetime(candle["close_time"])
-            }
-            for candle in structured
-        ]
         BinanceClient.done = True
-        return converted
 
+        return processed
