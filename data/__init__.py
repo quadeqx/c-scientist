@@ -50,15 +50,13 @@ def returns(expected_type):
         return wrapper
     return decorator
 
-# Timestamp conversion helper
-def ts_to_datetime(ts):
-    return datetime.utcfromtimestamp(ts / 1000).isoformat()
 
-# Binance client class
+
+
+
 class BinanceClient:
     done = False
     BASE_URL = "https://api.binance.com"
-
 
     def __init__(self):
         self.session = requests.Session()
@@ -67,7 +65,7 @@ class BinanceClient:
     @retry(times=3, delay=2)
     @returns(dict)
     @accepts(str, str, int)
-    def get_uiklines(self, symbol, interval, limit=1000):
+    def get_uiklines(self, symbol, interval, limit=1):
         UIKLINE_KEYS = [
             "open_time", "open", "high", "low", "close", "volume",
             "close_time", "quote_asset_volume", "number_of_trades",
