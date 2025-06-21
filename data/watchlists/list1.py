@@ -29,19 +29,20 @@ class WatchlistManager(QWidget):
         self.threadpool.setMaxThreadCount(10)  # Allow overlap for slow fetches
 
         self.fetching = {
-            'payments': False,
-            'ai': False,
-            'meme': False,
-            'L_3': False,
-            'L_1': False,
-            'dexchange': False,
-            'liquid_staking': False,
-            'L_0': False,
-            'L_2': False
+            'Payments': False,
+            'Artificial Int': False,
+            'Meme': False,
+            'Layer 3': False,
+            'Layer 1': False,
+            'Dexchange': False,
+            'Liquid Staking': False,
+            'Layer 0': False,
+            'Layer 2': False,
+            'Analytics': False
             }  # Track fetch status
 
         self.table_data = {
-                  "payments": {
+                  "Payments": {
                     "BTC": ["BTC", 0, 0, 0, 0, 0, 0],
                     "XRP": ["XRP", 0, 0, 0, 0, 0, 0],
                     "BCH": ["BCH", 0, 0, 0, 0, 0, 0],
@@ -50,7 +51,7 @@ class WatchlistManager(QWidget):
                     "TRX": ["TRX", 0, 0, 0, 0, 0, 0],
                     "DOGE": ["DOGE", 0, 0, 0, 0, 0, 0]
                   },
-                  "ai": {
+                  "Artificial Int": {
                     "LTC": ["LTC", 0, 0, 0, 0, 0, 0],
                     "AI": ["AI", 0, 0, 0, 0, 0, 0],
                     "TAO": ["TAO", 0, 0, 0, 0, 0, 0],
@@ -60,7 +61,7 @@ class WatchlistManager(QWidget):
                     "FET": ["FET", 0, 0, 0, 0, 0, 0],
                     "RENDER": ["RENDER", 0, 0, 0, 0, 0, 0]
                   },
-                  "meme": {
+                  "Meme": {
                     "TRUMP": ["TRUMP", 0, 0, 0, 0, 0, 0],
                     "SHIB": ["SHIB", 0, 0, 0, 0, 0, 0],
                     "BONK": ["BONK", 0, 0, 0, 0, 0, 0],
@@ -68,18 +69,18 @@ class WatchlistManager(QWidget):
                     "BOME": ["BOME", 0, 0, 0, 0, 0, 0],
                     "PEOPLE": ["PEOPLE", 0, 0, 0, 0, 0, 0]
                   },
-                  "analytics": {
+                  "Analytics": {
                     "ARKM": ["ARKM", 0, 0, 0, 0, 0, 0],
                     "CGPT": ["CGPT", 0, 0, 0, 0, 0, 0]
                   },
-                  "dexchange": {
+                  "Dexchange": {
                     "BNB": ["BNB", 0, 0, 0, 0, 0, 0],
                     "INJ": ["INJ", 0, 0, 0, 0, 0, 0],
                     "FTT": ["FTT", 0, 0, 0, 0, 0, 0],
                     "ARKM": ["ARKM", 0, 0, 0, 0, 0, 0],
                     "TKO": ["TKO", 0, 0, 0, 0, 0, 0]
                   },
-                  "liquid_staking": {
+                  "Liquid Staking": {
                     "WBETH": ["WBETH", 0, 0, 0, 0, 0, 0],
                     "LDO": ["LDO", 0, 0, 0, 0, 0, 0],
                     "ANKR": ["ANKR", 0, 0, 0, 0, 0, 0],
@@ -91,14 +92,14 @@ class WatchlistManager(QWidget):
                     "FIS": ["FIS", 0, 0, 0, 0, 0, 0],
                     "CHESS": ["CHESS", 0, 0, 0, 0, 0, 0]
                   },
-                  "L_0": {
+                  "Layer 0": {
                     "ATOM": ["ATOM", 0, 0, 0, 0, 0, 0],
                     "DOT": ["DOT", 0, 0, 0, 0, 0, 0],
                     "DATA": ["DATA", 0, 0, 0, 0, 0, 0],
                     "ZRO": ["ZRO", 0, 0, 0, 0, 0, 0],
                     "AVAX": ["AVAX", 0, 0, 0, 0, 0, 0]
                   },
-                  "L_1": {
+                  "Layer 1": {
                     "ADA": ["ADA", 0, 0, 0, 0, 0, 0],
                     "FIL": ["FIL", 0, 0, 0, 0, 0, 0],
                     "TON": ["TON", 0, 0, 0, 0, 0, 0],
@@ -108,7 +109,7 @@ class WatchlistManager(QWidget):
                     "KAVA": ["KAVA", 0, 0, 0, 0, 0, 0],
                     "VANRY": ["VANRY", 0, 0, 0, 0, 0, 0]
                   },
-                  "L_2": {
+                  "Layer 2": {
                     "OP": ["OP", 0, 0, 0, 0, 0, 0],
                     "CYBER": ["CYBER", 0, 0, 0, 0, 0, 0],
                     "ARB": ["ARB", 0, 0, 0, 0, 0, 0],
@@ -120,7 +121,7 @@ class WatchlistManager(QWidget):
                     "ZRX": ["ZRX", 0, 0, 0, 0, 0, 0],
                     "STRK": ["STRK", 0, 0, 0, 0, 0, 0]
                   },
-                  "L_3": {
+                  "Layer 3": {
                     "XAI": ["XAI", 0, 0, 0, 0, 0, 0],
                     "GHST": ["GHST", 0, 0, 0, 0, 0, 0]
                   }
@@ -137,9 +138,9 @@ class WatchlistManager(QWidget):
         self.layout.addWidget(self.payments, 0, 0)
 
         self.timer_payments = QTimer(self)
-        self.timer_payments.timeout.connect(partial(self.start_fetch, self.payments, 'payments'))
+        self.timer_payments.timeout.connect(partial(self.start_fetch, self.payments, 'Payments'))
         self.timer_payments.start(3000)
-        self.start_fetch(self.payments, 'payments')
+        self.start_fetch(self.payments, 'Payments')
 
 
         # === AI===
@@ -149,9 +150,9 @@ class WatchlistManager(QWidget):
         self.layout.addWidget(self.ai, 1, 0)
 
         self.timer_ai = QTimer(self)
-        self.timer_ai.timeout.connect(partial(self.start_fetch, self.ai, 'ai'))
+        self.timer_ai.timeout.connect(partial(self.start_fetch, self.ai, 'Artificial Int'))
         self.timer_ai.start(3000)
-        self.start_fetch(self.ai, 'ai')
+        self.start_fetch(self.ai, 'Artificial Int')
 
 
         # === Memes ===
@@ -161,9 +162,9 @@ class WatchlistManager(QWidget):
         self.layout.addWidget(self.meme, 0, 1)
 
         self.timer_meme = QTimer(self)
-        self.timer_meme.timeout.connect(partial(self.start_fetch, self.meme, 'meme'))
+        self.timer_meme.timeout.connect(partial(self.start_fetch, self.meme, 'Meme'))
         self.timer_meme.start(3000)
-        self.start_fetch(self.meme, 'meme')
+        self.start_fetch(self.meme, 'Meme')
 
 
         # === Layer 3 ===
@@ -173,9 +174,9 @@ class WatchlistManager(QWidget):
         self.layout.addWidget(self.l3, 1, 1)
 
         self.timer_l3 = QTimer(self)
-        self.timer_l3.timeout.connect(partial(self.start_fetch, self.l3, 'L_3'))
+        self.timer_l3.timeout.connect(partial(self.start_fetch, self.l3, 'Layer 3'))
         self.timer_l3.start(3000)
-        self.start_fetch(self.l3, 'L_3')
+        self.start_fetch(self.l3, 'Layer 3')
 
 
         # === Layer 1 ===
@@ -185,9 +186,9 @@ class WatchlistManager(QWidget):
         self.layout.addWidget(self.l1, 2, 1)
 
         self.timer_l1 = QTimer(self)
-        self.timer_l1.timeout.connect(partial(self.start_fetch, self.l1, 'L_1'))
+        self.timer_l1.timeout.connect(partial(self.start_fetch, self.l1, 'Layer 1'))
         self.timer_l1.start(3000)
-        self.start_fetch(self.l1, 'L_1')
+        self.start_fetch(self.l1, 'Layer 1')
 
 
         # === Dexchange ===
@@ -197,9 +198,9 @@ class WatchlistManager(QWidget):
         self.layout.addWidget(self.dexchange, 1, 2)
 
         self.timer_dexchange = QTimer(self)
-        self.timer_dexchange.timeout.connect(partial(self.start_fetch, self.dexchange, 'dexchange'))
+        self.timer_dexchange.timeout.connect(partial(self.start_fetch, self.dexchange, 'Dexchange'))
         self.timer_dexchange.start(3000)
-        self.start_fetch(self.dexchange, 'dexchange')
+        self.start_fetch(self.dexchange, 'Dexchange')
 
 
         # === Liquid staking ===
@@ -209,9 +210,9 @@ class WatchlistManager(QWidget):
         self.layout.addWidget(self.liquid_staking, 0, 2)
 
         self.timer_liquid_staking = QTimer(self)
-        self.timer_liquid_staking.timeout.connect(partial(self.start_fetch, self.liquid_staking, 'liquid_staking'))
+        self.timer_liquid_staking.timeout.connect(partial(self.start_fetch, self.liquid_staking, 'Liquid Staking'))
         self.timer_liquid_staking.start(3000)
-        self.start_fetch(self.liquid_staking, 'liquid_staking')
+        self.start_fetch(self.liquid_staking, 'Liquid Staking')
 
 
         # === Layer 0 ===
@@ -221,9 +222,9 @@ class WatchlistManager(QWidget):
         self.layout.addWidget(self.l0, 2, 0)
 
         self.timer_l0 = QTimer(self)
-        self.timer_l0.timeout.connect(partial(self.start_fetch, self.l0, 'L_0'))
+        self.timer_l0.timeout.connect(partial(self.start_fetch, self.l0, 'Layer 0'))
         self.timer_l0.start(3000)
-        self.start_fetch(self.l0, 'L_0')
+        self.start_fetch(self.l0, 'Layer 0')
 
 
         # === Layer 2 ===
@@ -233,9 +234,9 @@ class WatchlistManager(QWidget):
         self.layout.addWidget(self.l2, 2, 2)
 
         self.timer_l2 = QTimer(self)
-        self.timer_l2.timeout.connect(partial(self.start_fetch, self.l2, 'L_2'))
+        self.timer_l2.timeout.connect(partial(self.start_fetch, self.l2, 'Layer 2'))
         self.timer_l2.start(3000)
-        self.start_fetch(self.l2, 'L_2')
+        self.start_fetch(self.l2, 'Layer 2')
 
 
 
