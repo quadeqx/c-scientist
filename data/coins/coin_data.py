@@ -1,8 +1,19 @@
 import logging
 from data import BinanceClient  # Assumes decorators in data/__init__.py
+from logging.handlers import RotatingFileHandler
 
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+# Configure logging
 logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
+logger.propagate = False
+# Create formatter
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+
+# File handler with rotation (1MB per file, keep 3 backups)
+file_handler = RotatingFileHandler('coin_data.log', maxBytes=1_000_000, backupCount=3)
+file_handler.setLevel(logging.INFO)
+file_handler.setFormatter(formatter)
+logger.addHandler(file_handler)
 
 class Data:
     def __init__(self):
@@ -48,6 +59,7 @@ class coinprice:
                     logger.error(f"Failed to fetch prices for {trading_pair}: {str(e)}")
 
             logger.info(f"Fetched prices for {key}: {watchlist}")
+            #print('\n\n\n Watchlist data: ', watchlist, '\n\n\n')
             return watchlist
         except Exception as e:
             logger.error(f"Error fetching watchlist for {key}: {str(e)}")
@@ -56,7 +68,6 @@ class coinprice:
     def prepare_table_data(self, data, key):
         if not data:
             return []
-
 
         columns = ['open', 'high', 'low', 'close', 'volume', 'number_of_trades']
         table_data = []
@@ -69,5 +80,5 @@ class coinprice:
                     logger.error(f"Error formatting {col} for {symbol}: {str(e)}")
                     row.append("N/A")
             table_data.append(row)
-
+        #print('\n\n\nprocessed data: ', table_data, '\n\n\n')
         return table_data
