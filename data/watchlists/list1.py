@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QGridLayout
+from PyQt5.QtWidgets import QWidget, QGridLayout, QTableWidgetItem
 from pyqtgraph import TableWidget
 from PyQt5.QtCore import pyqtSignal, QObject, QRunnable, QThreadPool, QTimer
 from data.coins.coin_data import coinprice, Data
@@ -6,10 +6,18 @@ from functools import partial
 import logging
 import time
 from data.watchlists import CenteredItemDelegate
+from logging.handlers import RotatingFileHandler
 
 # Configure logging
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
+logger.propagate = False
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+file_handler = RotatingFileHandler('watchlist.log', maxBytes=1_000_000, backupCount=3)
+file_handler.setLevel(logging.INFO)
+file_handler.setFormatter(formatter)
+logger.addHandler(file_handler)
 
 class WatchlistManager(QWidget):
     def __init__(self):
@@ -31,6 +39,20 @@ class WatchlistManager(QWidget):
             'L_0': False,
             'L_2': False
             }  # Track fetch status
+
+        self.table_data = {
+            'payments': {},
+            'ai': {},
+            'meme': {},
+            'analytics': {},
+            'dexchange': {},
+            'liquid_staking': {},
+            'L_0': {},
+            'L_1': {},
+            'L_2': {},
+            'L_3': {}
+            }
+
 
         self.layout = QGridLayout()
         self.setLayout(self.layout)
@@ -166,21 +188,43 @@ class WatchlistManager(QWidget):
     def _fetch_complete(self, category):
         self.fetching[category] = False
 
+
+
     def _update_table(self, table, category, data):
         try:
             processed = self.coinprice.prepare_table_data(data, category)
             logger.info(f"[{id(table)}] Updating table for {category} with data: {processed}")
 
-            # Set row count and redraw table
-            table.setRowCount(len(processed))
-            table.setData(processed)
-            table.setHorizontalHeaderLabels(['Coin', 'Open', 'High', 'Close', 'Low', 'Volume', 'Trades'])
+            new_data = {row[0]: row for row in processed}
+            current_data = self.table_data[category]
+            print(new_data, '\n\n', current_data, '\n\n\n\n')
+
+            if len(new_data) > table.rowCount():
+                table.setRowCount(len(new_data))
+
+            max_columns = max(len(row) for row in new_data.values())
+            if table.columnCount() < max_columns:
+                table.setColumnCount(max_columns)
+            table.setHorizontalHeaderLabels([category, 'Open', 'High', 'Low', 'Close', 'Volume', "Trades"])
+
+            table.blockSignals(True)
+            for row_idx, (coin, new_row) in enumerate(new_data.items()):
+                for col_idx, value in enumerate(new_row):
+                    item = QTableWidgetItem(str(value))
+                    table.setItem(row_idx, col_idx, item)
+            table.blockSignals(False)
+
+            self.table_data[category] = new_data
+
 
             # Force GUI update
             table.viewport().update()
             table.resizeColumnsToContents()
+
+
         except Exception as e:
             logger.error(f"Error updating table for {category}: {str(e)}")
+
 
     def closeEvent(self, event):
         self.threadpool.clear()
