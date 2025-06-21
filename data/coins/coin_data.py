@@ -18,16 +18,16 @@ logger.addHandler(file_handler)
 class Data:
     def __init__(self):
         self.watchlists = {
-            "payments": ["BTC", "XRP", "BCH", "ARK", "PEPE", "TRX", "DOGE"],
-            "ai": ["LTC", "AI", "TAO", "NEAR", "WLD", "AIXBT", "FET", "RENDER"],
-            "meme": ["TRUMP", "SHIB", "BONK", "NOT", "BOME", "PEOPLE"],
-            "analytics": ["ARKM", "CGPT"],
-            "dexchange": ["BNB", "INJ", "FTT", "ARKM", "TKO"],
-            "liquid_staking": ["WBETH", "LDO", "ANKR", "RPL", "LISTA", "OGN", "QI", "HAEDAL", "FIS", "CHESS"],
-            "L_0": ["ATOM", "DOT", "DATA", "ZRO", "AVAX"],
-            "L_1": ["ADA", "FIL", "TON", "APT", "TAO", "TIA", "KAVA", "VANRY"],
-            "L_2": ["OP", "CYBER", "ARB", "STX", "IMX", "DYDX", "SNX", "ZK", "ZRX", "STRK"],
-            "L_3": ["XAI", "GHST"]
+            "Payments": ["BTC", "XRP", "BCH", "ARK", "PEPE", "TRX", "DOGE"],
+            "Artificial Int": ["LTC", "AI", "TAO", "NEAR", "WLD", "AIXBT", "FET", "RENDER"],
+            "Meme": ["TRUMP", "SHIB", "BONK", "NOT", "BOME", "PEOPLE"],
+            "Analytics": ["ARKM", "CGPT"],
+            "Dexchange": ["BNB", "INJ", "FTT", "ARKM", "TKO"],
+            "Liquid Staking": ["WBETH", "LDO", "ANKR", "RPL", "LISTA", "OGN", "QI", "HAEDAL", "FIS", "CHESS"],
+            "Layer 0": ["ATOM", "DOT", "DATA", "ZRO", "AVAX"],
+            "Layer 1": ["ADA", "FIL", "TON", "APT", "TAO", "TIA", "KAVA", "VANRY"],
+            "Layer 2": ["OP", "CYBER", "ARB", "STX", "IMX", "DYDX", "SNX", "ZK", "ZRX", "STRK"],
+            "Layer 3": ["XAI", "GHST"]
         }
 
     def get_watchlist_by_key(self, key):
