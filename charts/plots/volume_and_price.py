@@ -62,7 +62,7 @@ class CandlestickItem(pg.GraphicsObject):
 class Candle(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
-        print(f"Creating MainWindow instance: {id(self)}")
+        #print(f"Creating MainWindow instance: {id(self)}")
         self.client = BinanceClient()
         self.layout = QtWidgets.QVBoxLayout()
         self.plot_widget = CustomPlotWidget()
@@ -78,19 +78,19 @@ class Candle(QtWidgets.QWidget):
 
     def plot_candlesticks(self):
         if self.has_plotted:
-            print("Skipping redundant plot call")
-            print("Call stack:", traceback.format_stack())
+            #print("Skipping redundant plot call")
+            #print("Call stack:", traceback.format_stack())
             return
         try:
-            print("Fetching data and plotting...")
+            #print("Fetching data and plotting...")
             #print("Call stack:", traceback.format_stack())
             raw_data = self.client.get_uiklines("BTCUSDT", "1m", limit=1000)
             if not raw_data:
-                print("No data to plot (API call skipped)")
+                #print("No data to plot (API call skipped)")
                 return
             processed = preprocess_binance_data(raw_data)
             if not processed:
-                print("No data received from Binance API")
+                #print("No data received from Binance API")
                 return
             self.plot_widget.clear()  # Clear previous plot
             self.cross4 = CrosshairHandler(self.plot_widget)
@@ -101,4 +101,5 @@ class Candle(QtWidgets.QWidget):
             self.plot_widget.setXRange(start, end, padding=0.05)
             self.has_plotted = True
         except Exception as e:
-            print(f"Error fetching or plotting data: {e}")
+            #print(f"Error fetching or plotting data: {e}")
+            pass
