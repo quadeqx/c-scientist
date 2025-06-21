@@ -41,17 +41,90 @@ class WatchlistManager(QWidget):
             }  # Track fetch status
 
         self.table_data = {
-            'payments': {},
-            'ai': {},
-            'meme': {},
-            'analytics': {},
-            'dexchange': {},
-            'liquid_staking': {},
-            'L_0': {},
-            'L_1': {},
-            'L_2': {},
-            'L_3': {}
-            }
+                  "payments": {
+                    "BTC": ["BTC", 0, 0, 0, 0, 0, 0],
+                    "XRP": ["XRP", 0, 0, 0, 0, 0, 0],
+                    "BCH": ["BCH", 0, 0, 0, 0, 0, 0],
+                    "ARK": ["ARK", 0, 0, 0, 0, 0, 0],
+                    "PEPE": ["PEPE", 0, 0, 0, 0, 0, 0],
+                    "TRX": ["TRX", 0, 0, 0, 0, 0, 0],
+                    "DOGE": ["DOGE", 0, 0, 0, 0, 0, 0]
+                  },
+                  "ai": {
+                    "LTC": ["LTC", 0, 0, 0, 0, 0, 0],
+                    "AI": ["AI", 0, 0, 0, 0, 0, 0],
+                    "TAO": ["TAO", 0, 0, 0, 0, 0, 0],
+                    "NEAR": ["NEAR", 0, 0, 0, 0, 0, 0],
+                    "WLD": ["WLD", 0, 0, 0, 0, 0, 0],
+                    "AIXBT": ["AIXBT", 0, 0, 0, 0, 0, 0],
+                    "FET": ["FET", 0, 0, 0, 0, 0, 0],
+                    "RENDER": ["RENDER", 0, 0, 0, 0, 0, 0]
+                  },
+                  "meme": {
+                    "TRUMP": ["TRUMP", 0, 0, 0, 0, 0, 0],
+                    "SHIB": ["SHIB", 0, 0, 0, 0, 0, 0],
+                    "BONK": ["BONK", 0, 0, 0, 0, 0, 0],
+                    "NOT": ["NOT", 0, 0, 0, 0, 0, 0],
+                    "BOME": ["BOME", 0, 0, 0, 0, 0, 0],
+                    "PEOPLE": ["PEOPLE", 0, 0, 0, 0, 0, 0]
+                  },
+                  "analytics": {
+                    "ARKM": ["ARKM", 0, 0, 0, 0, 0, 0],
+                    "CGPT": ["CGPT", 0, 0, 0, 0, 0, 0]
+                  },
+                  "dexchange": {
+                    "BNB": ["BNB", 0, 0, 0, 0, 0, 0],
+                    "INJ": ["INJ", 0, 0, 0, 0, 0, 0],
+                    "FTT": ["FTT", 0, 0, 0, 0, 0, 0],
+                    "ARKM": ["ARKM", 0, 0, 0, 0, 0, 0],
+                    "TKO": ["TKO", 0, 0, 0, 0, 0, 0]
+                  },
+                  "liquid_staking": {
+                    "WBETH": ["WBETH", 0, 0, 0, 0, 0, 0],
+                    "LDO": ["LDO", 0, 0, 0, 0, 0, 0],
+                    "ANKR": ["ANKR", 0, 0, 0, 0, 0, 0],
+                    "RPL": ["RPL", 0, 0, 0, 0, 0, 0],
+                    "LISTA": ["LISTA", 0, 0, 0, 0, 0, 0],
+                    "OGN": ["OGN", 0, 0, 0, 0, 0, 0],
+                    "QI": ["QI", 0, 0, 0, 0, 0, 0],
+                    "HAEDAL": ["HAEDAL", 0, 0, 0, 0, 0, 0],
+                    "FIS": ["FIS", 0, 0, 0, 0, 0, 0],
+                    "CHESS": ["CHESS", 0, 0, 0, 0, 0, 0]
+                  },
+                  "L_0": {
+                    "ATOM": ["ATOM", 0, 0, 0, 0, 0, 0],
+                    "DOT": ["DOT", 0, 0, 0, 0, 0, 0],
+                    "DATA": ["DATA", 0, 0, 0, 0, 0, 0],
+                    "ZRO": ["ZRO", 0, 0, 0, 0, 0, 0],
+                    "AVAX": ["AVAX", 0, 0, 0, 0, 0, 0]
+                  },
+                  "L_1": {
+                    "ADA": ["ADA", 0, 0, 0, 0, 0, 0],
+                    "FIL": ["FIL", 0, 0, 0, 0, 0, 0],
+                    "TON": ["TON", 0, 0, 0, 0, 0, 0],
+                    "APT": ["APT", 0, 0, 0, 0, 0, 0],
+                    "TAO": ["TAO", 0, 0, 0, 0, 0, 0],
+                    "TIA": ["TIA", 0, 0, 0, 0, 0, 0],
+                    "KAVA": ["KAVA", 0, 0, 0, 0, 0, 0],
+                    "VANRY": ["VANRY", 0, 0, 0, 0, 0, 0]
+                  },
+                  "L_2": {
+                    "OP": ["OP", 0, 0, 0, 0, 0, 0],
+                    "CYBER": ["CYBER", 0, 0, 0, 0, 0, 0],
+                    "ARB": ["ARB", 0, 0, 0, 0, 0, 0],
+                    "STX": ["STX", 0, 0, 0, 0, 0, 0],
+                    "IMX": ["IMX", 0, 0, 0, 0, 0, 0],
+                    "DYDX": ["DYDX", 0, 0, 0, 0, 0, 0],
+                    "SNX": ["SNX", 0, 0, 0, 0, 0, 0],
+                    "ZK": ["ZK", 0, 0, 0, 0, 0, 0],
+                    "ZRX": ["ZRX", 0, 0, 0, 0, 0, 0],
+                    "STRK": ["STRK", 0, 0, 0, 0, 0, 0]
+                  },
+                  "L_3": {
+                    "XAI": ["XAI", 0, 0, 0, 0, 0, 0],
+                    "GHST": ["GHST", 0, 0, 0, 0, 0, 0]
+                  }
+                }
 
 
         self.layout = QGridLayout()
@@ -112,7 +185,7 @@ class WatchlistManager(QWidget):
         self.layout.addWidget(self.l1, 2, 1)
 
         self.timer_l1 = QTimer(self)
-        self.timer_l1.timeout.connect(partial(self.start_fetch, self.ai, 'L_1'))
+        self.timer_l1.timeout.connect(partial(self.start_fetch, self.l1, 'L_1'))
         self.timer_l1.start(3000)
         self.start_fetch(self.l1, 'L_1')
 
@@ -136,7 +209,7 @@ class WatchlistManager(QWidget):
         self.layout.addWidget(self.liquid_staking, 0, 2)
 
         self.timer_liquid_staking = QTimer(self)
-        self.timer_liquid_staking.timeout.connect(partial(self.start_fetch, self.dexchange, 'liquid_staking'))
+        self.timer_liquid_staking.timeout.connect(partial(self.start_fetch, self.liquid_staking, 'liquid_staking'))
         self.timer_liquid_staking.start(3000)
         self.start_fetch(self.liquid_staking, 'liquid_staking')
 
@@ -197,7 +270,6 @@ class WatchlistManager(QWidget):
 
             new_data = {row[0]: row for row in processed}
             current_data = self.table_data[category]
-            print(new_data, '\n\n', current_data, '\n\n\n\n')
 
             if len(new_data) > table.rowCount():
                 table.setRowCount(len(new_data))
@@ -210,8 +282,9 @@ class WatchlistManager(QWidget):
             table.blockSignals(True)
             for row_idx, (coin, new_row) in enumerate(new_data.items()):
                 for col_idx, value in enumerate(new_row):
-                    item = QTableWidgetItem(str(value))
-                    table.setItem(row_idx, col_idx, item)
+                    if new_data[coin][0] == current_data[coin][0]:
+                        item = QTableWidgetItem(str(value))
+                        table.setItem(row_idx, col_idx, item)
             table.blockSignals(False)
 
             self.table_data[category] = new_data

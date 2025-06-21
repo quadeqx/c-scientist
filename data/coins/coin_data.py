@@ -80,5 +80,4 @@ class coinprice:
                     logger.error(f"Error formatting {col} for {symbol}: {str(e)}")
                     row.append("N/A")
             table_data.append(row)
-        #print('\n\n\nprocessed data: ', table_data, '\n\n\n')
         return table_data

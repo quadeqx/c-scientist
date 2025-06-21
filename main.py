@@ -196,8 +196,6 @@ if __name__ == "__main__":
     else:
         app = QtWidgets.QApplication.instance()
 
-    print(f"Initial BinanceClient.done: {BinanceClient.done}")
-
     splash, parent = show_splash(app, CryptoDashboard)
 
     global shown
@@ -205,18 +203,14 @@ if __name__ == "__main__":
     def check_data_loaded():
         global shown
         try:
-            print(f"Checking BinanceClient.done: {BinanceClient.done}")
             if BinanceClient.done and not shown:
-                print("Data loaded, showing main window")
                 shown = True
                 parent.show()
                 QTimer.singleShot(500, splash.close)
             elif not shown:
-                print("Not yet")
                 QTimer.singleShot(100, check_data_loaded)
                 app.processEvents()
         except AttributeError:
-            print("Error: BinanceClient.done not found")
             if not shown:
                 QTimer.singleShot(100, check_data_loaded)
                 app.processEvents()
