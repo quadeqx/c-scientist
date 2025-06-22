@@ -7,6 +7,7 @@ import logging
 import time
 from data.watchlists import CenteredItemDelegate
 from logging.handlers import RotatingFileHandler
+import PyQt5
 
 # Configure logging
 
@@ -278,7 +279,9 @@ class WatchlistManager(QWidget):
             max_columns = max(len(row) for row in new_data.values())
             if table.columnCount() < max_columns:
                 table.setColumnCount(max_columns)
+
             table.setHorizontalHeaderLabels([category, 'Open', 'High', 'Low', 'Close', 'Volume', "Trades"])
+
 
             table.blockSignals(True)
             for row_idx, (coin, new_row) in enumerate(new_data.items()):
@@ -294,6 +297,7 @@ class WatchlistManager(QWidget):
             # Force GUI update
             table.viewport().update()
             table.resizeColumnsToContents()
+            table.horizontalHeader().setSectionResizeMode(PyQt5.QtWidgets.QHeaderView.Stretch)
 
 
         except Exception as e:
