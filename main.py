@@ -26,7 +26,7 @@ class CryptoDashboard(QMainWindow):
 
         self.setWindowTitle("Crypto Dashboard")
         self.setWindowIcon(QIcon('favicon.ico'))
-        self.resize(800, 600)
+        self.resize(1600, 900)
 
         self.main_widget = QWidget()
         self.setCentralWidget(self.main_widget)
@@ -63,6 +63,17 @@ class CryptoDashboard(QMainWindow):
         # Variables for window dragging
         self.dragging = False
         self.mouse_pos = None
+        self.center()
+
+    def center(self):
+        # Get the geometry of the screen
+        screen = QtWidgets.QApplication.primaryScreen().availableGeometry()
+        # Get the geometry of the window
+        window_geometry = self.frameGeometry()
+        # Calculate the center point
+        window_geometry.moveCenter(screen.center())
+        # Move the window to the calculated position
+        self.move(window_geometry.topLeft())
 
     def headerbar(self):
         headerbar = QWidget()
