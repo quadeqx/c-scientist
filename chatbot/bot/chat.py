@@ -28,7 +28,7 @@ class Chat(QWidget):
             border: 1px solid #5E5E5E;
         """)
         self.text_label.setAlignment(Qt.AlignCenter)
-        self.text_label.setFixedSize(800, 300)  # Fixed size for consistency
+        self.text_label.setFixedSize(800, 300)
 
         h_layout.addWidget(self.text_label)
         h_layout.addStretch()

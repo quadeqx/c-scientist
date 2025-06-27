@@ -1,37 +1,53 @@
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QHBoxLayout
-from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QTabWidget
+from PyQt5.QtWebEngineWidgets import QWebEngineView
+from PyQt5.QtCore import QUrl
+from PyQt5.QtWebEngineCore import QWebEngineUrlRequestInterceptor
+
+
+class AdBlocker(QWebEngineUrlRequestInterceptor):
+    def interceptRequest(self, info):
+        url = info.requestUrl().toString()
+        if any(ad in url for ad in [
+            "doubleclick.net", "googlesyndication.com", "adservice.google.com",
+            "googletagmanager.com", "ads.yahoo.com", "taboola.com", "outbrain.com"
+        ]):
+            info.block(True)
+
+
+class CustomWebEngineView(QWebEngineView):
+    def createWindow(self, _type):
+        # Block popups
+        return None
 
 
 class News(QWidget):
     def __init__(self):
         super().__init__()
 
-        self.layout = QVBoxLayout()
-        self.setLayout(self.layout)
+        self.layout = QVBoxLayout(self)
+        self.tab = QTabWidget()
+        self.layout.addWidget(self.tab)
 
-        # Add vertical spacer to center content
-        self.layout.addStretch()
+        self.interceptor = AdBlocker()
 
-        # Create horizontal layout for centering the label
-        h_layout = QHBoxLayout()
-        h_layout.addStretch()
+        def make_browser(url):
+            view = CustomWebEngineView()
 
-        # Add stylish text label
-        self.text_label = QLabel("Section under Development!")
-        self.text_label.setStyleSheet("""
-            font-family: 'Roboto', 'Arial', sans-serif;
-            font-size: 60px;
-            font-weight: bold;
-            color: #FFFFFF;
-            background-color: #3E3E3E;
-            padding: 20px;
-            border-radius: 12px;
-            border: 1px solid #5E5E5E;
-        """)
-        self.text_label.setAlignment(Qt.AlignCenter)
-        self.text_label.setFixedSize(800, 300)
+            # Create page then apply interceptor
+            page = view.page()
+            page.setUrlRequestInterceptor(self.interceptor)
 
-        h_layout.addWidget(self.text_label)
-        h_layout.addStretch()
-        self.layout.addLayout(h_layout)
-        self.layout.addStretch()
+            view.load(QUrl(url))
+            return view
+
+        self.tab.addTab(make_browser("https://coinmarketcal.com/"), "Coinmarketcal")
+        self.tab.addTab(make_browser("https://www.coindesk.com/"), "Coindesk")
+        self.tab.addTab(make_browser("https://cointelegraph.com/"), "Cointelegraph")
+        self.tab.addTab(make_browser("https://coingape.com/"), "Coingape")
+        self.tab.addTab(make_browser("https://crypto.news/"), "Crypto News")
+        self.tab.addTab(make_browser("https://decrypt.co/"), "Decrypt")
+        self.tab.addTab(make_browser("https://www.cryptotimes.io/"), "Cryptotimes")
+        self.tab.addTab(make_browser("https://www.theblock.co/"), "The Block")
+        self.tab.addTab(make_browser("https://cryptoslate.com/"), "Cryptoslate")
+        self.tab.addTab(make_browser("https://coindoo.com/"), "Coindoo")
+        self.tab.addTab(make_browser("https://u.today/"), "U Today")
