@@ -15,11 +15,12 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 logger = logging.getLogger(__name__)
 logger.propagate = False
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+"""
 file_handler = RotatingFileHandler('watchlist.log', maxBytes=1_000_000, backupCount=3)
 file_handler.setLevel(logging.INFO)
 file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
-
+"""
 class WatchlistManager(QWidget):
     def __init__(self):
         super().__init__()
@@ -130,6 +131,7 @@ class WatchlistManager(QWidget):
 
 
         self.layout = QGridLayout()
+        self.layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self.layout)
 
         # === payments ===

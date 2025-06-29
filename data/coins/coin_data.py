@@ -10,11 +10,12 @@ logger.propagate = False
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 
 # File handler with rotation (1MB per file, keep 3 backups)
+"""
 file_handler = RotatingFileHandler('coin_data.log', maxBytes=1_000_000, backupCount=3)
 file_handler.setLevel(logging.INFO)
 file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
-
+"""
 class Data:
     def __init__(self):
         self.watchlists = {

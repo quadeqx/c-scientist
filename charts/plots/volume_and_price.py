@@ -4,6 +4,11 @@ from datetime import datetime
 import traceback
 from data import BinanceClient
 from analytics import CrosshairHandler, CustomPlotWidget
+from PyQt5.QtWidgets import QComboBox
+from PyQt5.QtCore import Qt
+from data.coins.coin_data import Data
+from PyQt5.QtGui import QPalette, QColor
+
 
 def ts_to_datetime(ms_timestamp):
     return datetime.fromtimestamp(ms_timestamp / 1000.0).isoformat()
@@ -65,11 +70,29 @@ class Candle(QtWidgets.QWidget):
         #print(f"Creating MainWindow instance: {id(self)}")
         self.client = BinanceClient()
         self.layout = QtWidgets.QVBoxLayout()
+        self.layout.setContentsMargins(0, 0, 0, 0)
         self.plot_widget = CustomPlotWidget()
+        self.crosshair = CrosshairHandler(self.plot_widget)
+        self.plot_widget.setBackground(QColor(30, 34, 45))
         self.plot_widget.setAxisItems({'bottom': pg.DateAxisItem()})
+
+
+        data = Data().watchlists
+        self.combobox = QComboBox(self.plot_widget)
+        self.combobox.setEditable(True)
+        self.combobox.setPlaceholderText('Select item')
+        self.combobox.addItems([item for values in data.values() for item in values])
+        self.combobox.setFixedSize(110, 30)
+        self.combobox.setMaxVisibleItems(15)
+        self.combobox.setPlaceholderText('Select coin')
+
+        pallet = self.combobox.palette()
+        pallet.setColor(QPalette.Base, QColor(30,34,45))
+        pallet.setColor(QPalette.Button, QColor(30,34,45))
+        self.combobox.setPalette(pallet)
+        self.combobox.view().setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+
         self.layout.addWidget(self.plot_widget)
-
-
         self.setLayout(self.layout)
         self.has_plotted = False
 

@@ -19,7 +19,7 @@ class Chat(QWidget):
         self.text_label = QLabel("Section under Development!")
         self.text_label.setStyleSheet("""
             font-family: 'Roboto', 'Arial', sans-serif;
-            font-size: 60px;
+            font-size: 40px;
             font-weight: bold;
             color: #FFFFFF;
             background-color: #3E3E3E;

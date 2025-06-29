@@ -1,5 +1,4 @@
 import requests
-from datetime import datetime
 from functools import wraps
 import time
 
@@ -21,12 +20,14 @@ def retry(times=3, delay=1):
                 try:
                     return func(*args, **kwargs)
                 except Exception as e:
-                    print(f"[RETRY] Attempt {attempt} failed: {e}\n\n")
+                    print(f"[RETRY] Attempt {attempt} failed\n\n")
+                    continue
                     last_exception = e
                     time.sleep(delay)
             raise last_exception
         return wrapper
     return decorator
+
 
 def accepts(*types):
     def decorator(func):
