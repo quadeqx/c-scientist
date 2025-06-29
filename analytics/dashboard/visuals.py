@@ -23,21 +23,23 @@ class AnalysisWidgets(QWidget):
 
         upper = QWidget()
         horiz = QHBoxLayout()
-        upper.setStyleSheet("background-color: #3E3E3E;")
         upper.setLayout(horiz)
 
         self.portfolio = CustomPlotWidget()
+        self.portfolio.setBackground(QColor(30, 34, 45))
         self.cross = CrosshairHandler(self.portfolio)
         horiz.addWidget(self.portfolio, stretch=1)
 
 
         self.by_coin = CustomPlotWidget()
+        self.by_coin.setBackground(QColor(30, 34, 45))
         self.cross2 = CrosshairHandler(self.by_coin)
         horiz.addWidget(self.by_coin, stretch=1)
 
         key_metrics = QWidget()
 
         layout = QGridLayout()
+        layout.setContentsMargins(0, 0, 0, 0)
 
         highest_profit = QWidget()
         highest_profit.setStyleSheet("background-color: #00ff00;")
@@ -119,6 +121,7 @@ class AnalysisWidgets(QWidget):
 
 
         self.inner = CustomPlotWidget()
+        self.inner.setBackground(QColor(30, 34, 45))
         self.cross3 = CrosshairHandler(self.inner)
         mid_horiz.addWidget(self.inner, stretch=1)
 
@@ -128,11 +131,11 @@ class AnalysisWidgets(QWidget):
 
 
         bottom = pg.TableWidget(10, 3, None, editable=True)
-        bottom.setData([[1,2,3,4,5,6,7,8,9]])
+        bottom.setData([[1,2,3,4,5,6,7,8,9,10]])
         bottom.setStyleSheet("background-color: #3E3E3E;")
         bottom.horizontalHeader().setSectionResizeMode(PyQt5.QtWidgets.QHeaderView.Stretch)
         bottom.setHorizontalHeaderLabels(
-            ["Date", "Ticker", "Entry Price", "Exit Price", "Leverage", "Position size", "Entry Fees", "Exit Fees", "Net Profit"])
+            ["Trade ID", "Date", "Ticker", "Entry Price", "Exit Price", "Leverage", "Position size", "Entry Fees", "Exit Fees", "Net Profit"])
         self.layout.addWidget(bottom, stretch=1)
 
 
