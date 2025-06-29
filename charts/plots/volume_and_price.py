@@ -1,7 +1,5 @@
 from PyQt5 import QtWidgets, QtCore, QtGui
 import pyqtgraph as pg
-from datetime import datetime
-import traceback
 from data import BinanceClient
 from analytics import CrosshairHandler, CustomPlotWidget
 from PyQt5.QtWidgets import QComboBox
@@ -9,21 +7,15 @@ from PyQt5.QtCore import Qt
 from data.coins.coin_data import Data
 from PyQt5.QtGui import QPalette, QColor
 
-
-def ts_to_datetime(ms_timestamp):
-    return datetime.fromtimestamp(ms_timestamp / 1000.0).isoformat()
-
-def preprocess_binance_data(binance_data):
+def preprocess_data(binance_data):
     processed = []
     for candle in binance_data:
-        dt = datetime.fromisoformat(candle["open_time"])
-        timestamp = dt.timestamp()
         processed.append({
-            "Date": timestamp,
-            "Open": float(candle["open"]),
-            "High": float(candle["high"]),
-            "Low": float(candle["low"]),
-            "Close": float(candle["close"])
+            "Date": float(candle['open_time']) /1000,
+            "Open": float(candle['open']),
+            "High": float(candle['high']),
+            "Low": float(candle['low']),
+            "Close": float(candle['close'])
         })
     return processed
 
@@ -36,8 +28,8 @@ class CandlestickItem(pg.GraphicsObject):
     def generatePicture(self):
         self.picture = QtGui.QPicture()
         p = QtGui.QPainter(self.picture)
-        w = 30
-
+        w = 700
+        print(self.data)
         for row in self.data:
             t = row['Date']
             open_, high, low, close = row['Open'], row['High'], row['Low'], row['Close']
@@ -100,29 +92,21 @@ class Candle(QtWidgets.QWidget):
         QtCore.QTimer.singleShot(0, self.plot_candlesticks)
 
     def plot_candlesticks(self):
+
         if self.has_plotted:
-            #print("Skipping redundant plot call")
-            #print("Call stack:", traceback.format_stack())
             return
         try:
-            #print("Fetching data and plotting...")
-            #print("Call stack:", traceback.format_stack())
-            raw_data = self.client.get_uiklines("BTCUSDT", "1m", limit=1000)
+            raw_data = self.client.get_plot("BTCUSDT", "30m", limit=1000)
+            print(raw_data)
             if not raw_data:
-                #print("No data to plot (API call skipped)")
                 return
-            processed = preprocess_binance_data(raw_data)
+            processed = preprocess_data(raw_data)
             if not processed:
-                #print("No data received from Binance API")
                 return
             self.plot_widget.clear()  # Clear previous plot
             self.cross4 = CrosshairHandler(self.plot_widget)
             candlestick_item = CandlestickItem(processed)
             self.plot_widget.addItem(candlestick_item)
-            start = processed[0]['Date'] if len(processed) >= 10 else processed[0]['Date']
-            end = processed[-1]['Date']
-            self.plot_widget.setXRange(start, end, padding=0.05)
             self.has_plotted = True
-        except Exception as e:
-            #print(f"Error fetching or plotting data: {e}")
+        except Exception:
             pass

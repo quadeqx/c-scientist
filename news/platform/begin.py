@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QTabWidget
-from PyQt5.QtWebEngineWidgets import QWebEngineView
+from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
 from PyQt5.QtCore import QUrl
 from PyQt5.QtWebEngineCore import QWebEngineUrlRequestInterceptor
 
@@ -19,12 +19,17 @@ class CustomWebEngineView(QWebEngineView):
         # Block popups
         return None
 
+class SilentWebEnginePage(QWebEnginePage):
+    def javaScriptConsoleMessage(self, level, message, lineNumber, sourceID):
+        pass
+
 
 class News(QWidget):
     def __init__(self):
         super().__init__()
 
         self.layout = QVBoxLayout(self)
+        self.layout.setContentsMargins(0, 0, 0, 0)
         self.tab = QTabWidget()
         self.layout.addWidget(self.tab)
 
@@ -32,11 +37,9 @@ class News(QWidget):
 
         def make_browser(url):
             view = CustomWebEngineView()
-
-            # Create page then apply interceptor
-            page = view.page()
+            page = SilentWebEnginePage(self)
+            view.setPage(page)
             page.setUrlRequestInterceptor(self.interceptor)
-
             view.load(QUrl(url))
             return view
 

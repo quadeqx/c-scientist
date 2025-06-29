@@ -66,7 +66,7 @@ class BinanceClient:
     @retry(times=3, delay=2)
     @returns(dict)
     @accepts(str, str, int)
-    def get_uiklines(self, symbol, interval, limit=1):
+    def get_uiklines(self, symbol, interval, limit=999):
         UIKLINE_KEYS = [
             "open_time", "open", "high", "low", "close", "volume",
             "close_time", "quote_asset_volume", "number_of_trades",
@@ -88,3 +88,25 @@ class BinanceClient:
         BinanceClient.done = True
 
         return processed
+
+    def get_plot(self, symbol, interval, limit):
+        UIKLINE_KEYS = [
+            "open_time", "open", "high", "low", "close", "volume",
+            "close_time", "quote_asset_volume", "number_of_trades",
+            "taker_buy_base", "taker_buy_quote", "ignore"
+        ]
+
+        url = f"{self.BASE_URL}/api/v3/uiKlines"
+        params = {
+            "symbol": symbol.upper(),
+            "interval": interval,
+            "limit": limit
+        }
+        response = self.session.get(url, params=params)
+        response.raise_for_status()
+        raw_data = response.json()
+
+        processed = [dict(zip(UIKLINE_KEYS, kline)) for kline in raw_data]
+        return processed
+
+
