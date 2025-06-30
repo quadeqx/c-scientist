@@ -13,7 +13,7 @@ import PyQt5
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
-logger.propagate = True
+logger.propagate = False
 """
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 
@@ -23,6 +23,8 @@ file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
 """
 class WatchlistManager(QWidget):
+    """Watchlist management class."""
+
     def __init__(self):
         super().__init__()
 
@@ -270,13 +272,11 @@ class WatchlistManager(QWidget):
 
 
     def _update_table(self, table, category, data):
-        print('\n\n\ntrying...\n\n\n\n')
         try:
             processed = self.coinprice.prepare_table_data(data, category)
             logger.info(f"[{id(table)}] Updating table for {category} with data: {processed}")
 
             new_data = {row[0]: row for row in processed}
-
             current_data = self.table_data[category]
 
 
@@ -308,7 +308,7 @@ class WatchlistManager(QWidget):
 
 
         except Exception as e:
-            print(f"Error updating table for {category}: {str(e)}")
+            logger.error(f"Error updating table for {category}: {str(e)}")
 
 
 
