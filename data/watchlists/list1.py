@@ -31,7 +31,7 @@ class WatchlistManager(QWidget):
         self.data_manager = Data()
         self.coinprice = coinprice()
         self.threadpool = QThreadPool.globalInstance()
-        self.threadpool.setMaxThreadCount(10)  # Allow overlap for slow fetches
+        self.threadpool.setMaxThreadCount(12)  # Allow overlap for slow fetches
 
         self.fetching = {
             'Payments': False,
@@ -44,212 +44,43 @@ class WatchlistManager(QWidget):
             'Layer 0': False,
             'Layer 2': False,
             'Analytics': False
-            }  # Track fetch status
+            }
 
-        self.table_data = {
-                  "Payments": {
-                    "BTC": ["BTC", 0, 0, 0, 0, 0, 0],
-                    "XRP": ["XRP", 0, 0, 0, 0, 0, 0],
-                    "BCH": ["BCH", 0, 0, 0, 0, 0, 0],
-                    "ARK": ["ARK", 0, 0, 0, 0, 0, 0],
-                    "PEPE": ["PEPE", 0, 0, 0, 0, 0, 0],
-                    "TRX": ["TRX", 0, 0, 0, 0, 0, 0],
-                    "DOGE": ["DOGE", 0, 0, 0, 0, 0, 0]
-                  },
-                  "Artificial Int": {
-                    "LTC": ["LTC", 0, 0, 0, 0, 0, 0],
-                    "AI": ["AI", 0, 0, 0, 0, 0, 0],
-                    "TAO": ["TAO", 0, 0, 0, 0, 0, 0],
-                    "NEAR": ["NEAR", 0, 0, 0, 0, 0, 0],
-                    "WLD": ["WLD", 0, 0, 0, 0, 0, 0],
-                    "AIXBT": ["AIXBT", 0, 0, 0, 0, 0, 0],
-                    "FET": ["FET", 0, 0, 0, 0, 0, 0],
-                    "RENDER": ["RENDER", 0, 0, 0, 0, 0, 0]
-                  },
-                  "Meme": {
-                    "TRUMP": ["TRUMP", 0, 0, 0, 0, 0, 0],
-                    "SHIB": ["SHIB", 0, 0, 0, 0, 0, 0],
-                    "BONK": ["BONK", 0, 0, 0, 0, 0, 0],
-                    "NOT": ["NOT", 0, 0, 0, 0, 0, 0],
-                    "BOME": ["BOME", 0, 0, 0, 0, 0, 0],
-                    "PEOPLE": ["PEOPLE", 0, 0, 0, 0, 0, 0]
-                  },
-                  "Analytics": {
-                    "ARKM": ["ARKM", 0, 0, 0, 0, 0, 0],
-                    "CGPT": ["CGPT", 0, 0, 0, 0, 0, 0]
-                  },
-                  "Dexchange": {
-                    "BNB": ["BNB", 0, 0, 0, 0, 0, 0],
-                    "INJ": ["INJ", 0, 0, 0, 0, 0, 0],
-                    "FTT": ["FTT", 0, 0, 0, 0, 0, 0],
-                    "ARKM": ["ARKM", 0, 0, 0, 0, 0, 0],
-                    "TKO": ["TKO", 0, 0, 0, 0, 0, 0]
-                  },
-                  "Liquid Staking": {
-                    "WBETH": ["WBETH", 0, 0, 0, 0, 0, 0],
-                    "LDO": ["LDO", 0, 0, 0, 0, 0, 0],
-                    "ANKR": ["ANKR", 0, 0, 0, 0, 0, 0],
-                    "RPL": ["RPL", 0, 0, 0, 0, 0, 0],
-                    "LISTA": ["LISTA", 0, 0, 0, 0, 0, 0],
-                    "OGN": ["OGN", 0, 0, 0, 0, 0, 0],
-                    "QI": ["QI", 0, 0, 0, 0, 0, 0],
-                    "HAEDAL": ["HAEDAL", 0, 0, 0, 0, 0, 0],
-                    "FIS": ["FIS", 0, 0, 0, 0, 0, 0],
-                    "CHESS": ["CHESS", 0, 0, 0, 0, 0, 0]
-                  },
-                  "Layer 0": {
-                    "ATOM": ["ATOM", 0, 0, 0, 0, 0, 0],
-                    "DOT": ["DOT", 0, 0, 0, 0, 0, 0],
-                    "DATA": ["DATA", 0, 0, 0, 0, 0, 0],
-                    "ZRO": ["ZRO", 0, 0, 0, 0, 0, 0],
-                    "AVAX": ["AVAX", 0, 0, 0, 0, 0, 0]
-                  },
-                  "Layer 1": {
-                    "ADA": ["ADA", 0, 0, 0, 0, 0, 0],
-                    "FIL": ["FIL", 0, 0, 0, 0, 0, 0],
-                    "TON": ["TON", 0, 0, 0, 0, 0, 0],
-                    "APT": ["APT", 0, 0, 0, 0, 0, 0],
-                    "TAO": ["TAO", 0, 0, 0, 0, 0, 0],
-                    "TIA": ["TIA", 0, 0, 0, 0, 0, 0],
-                    "KAVA": ["KAVA", 0, 0, 0, 0, 0, 0],
-                    "VANRY": ["VANRY", 0, 0, 0, 0, 0, 0]
-                  },
-                  "Layer 2": {
-                    "OP": ["OP", 0, 0, 0, 0, 0, 0],
-                    "CYBER": ["CYBER", 0, 0, 0, 0, 0, 0],
-                    "ARB": ["ARB", 0, 0, 0, 0, 0, 0],
-                    "STX": ["STX", 0, 0, 0, 0, 0, 0],
-                    "IMX": ["IMX", 0, 0, 0, 0, 0, 0],
-                    "DYDX": ["DYDX", 0, 0, 0, 0, 0, 0],
-                    "SNX": ["SNX", 0, 0, 0, 0, 0, 0],
-                    "ZK": ["ZK", 0, 0, 0, 0, 0, 0],
-                    "ZRX": ["ZRX", 0, 0, 0, 0, 0, 0],
-                    "STRK": ["STRK", 0, 0, 0, 0, 0, 0]
-                  },
-                  "Layer 3": {
-                    "XAI": ["XAI", 0, 0, 0, 0, 0, 0],
-                    "GHST": ["GHST", 0, 0, 0, 0, 0, 0]
-                  }
-                }
+        self.table_data = {}
+
+        for category, coins in self.data_manager.watchlists.items():
+            self.table_data[category] = {coin: [coin, 0, 0, 0, 0, 0, 0] for coin in coins}
+
 
 
         self.layout = QGridLayout()
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.setLayout(self.layout)
 
-        # === payments ===
-        self.payments = TableWidget(10, 7)
-        self.payments.setHorizontalHeaderLabels(['Coin', 'Open', 'High', 'Low', 'Close', 'Volume', 'Trades'])
-        self.payments.resizeColumnsToContents()
-        self.layout.addWidget(self.payments, 0, 0)
 
-        self.timer_payments = QTimer(self)
-        self.timer_payments.timeout.connect(partial(self.start_fetch, self.payments, 'Payments'))
-        self.timer_payments.start(3000)
-        self.start_fetch(self.payments, 'Payments')
-
-
-        # === AI===
-        self.ai = TableWidget(10, 1)
-        self.ai.setHorizontalHeaderLabels(['AI Coin'])
-        self.ai.resizeColumnsToContents()
-        self.layout.addWidget(self.ai, 1, 0)
-
-        self.timer_ai = QTimer(self)
-        self.timer_ai.timeout.connect(partial(self.start_fetch, self.ai, 'Artificial Int'))
-        self.timer_ai.start(3000)
-        self.start_fetch(self.ai, 'Artificial Int')
-
-
-        # === Memes ===
-        self.meme = TableWidget(10, 1)
-        self.meme.setHorizontalHeaderLabels(['Meme'])
-        self.meme.resizeColumnsToContents()
-        self.layout.addWidget(self.meme, 0, 1)
-
-        self.timer_meme = QTimer(self)
-        self.timer_meme.timeout.connect(partial(self.start_fetch, self.meme, 'Meme'))
-        self.timer_meme.start(3000)
-        self.start_fetch(self.meme, 'Meme')
-
-
-        # === Layer 3 ===
-        self.l3 = TableWidget(10, 1)
-        self.l3.setHorizontalHeaderLabels(['Layer 3'])
-        self.l3.resizeColumnsToContents()
-        self.layout.addWidget(self.l3, 1, 1)
-
-        self.timer_l3 = QTimer(self)
-        self.timer_l3.timeout.connect(partial(self.start_fetch, self.l3, 'Layer 3'))
-        self.timer_l3.start(3000)
-        self.start_fetch(self.l3, 'Layer 3')
-
-
-        # === Layer 1 ===
-        self.l1 = TableWidget(10, 1)
-        self.l1.setHorizontalHeaderLabels(['Layer 1'])
-        self.l1.resizeColumnsToContents()
-        self.layout.addWidget(self.l1, 2, 1)
-
-        self.timer_l1 = QTimer(self)
-        self.timer_l1.timeout.connect(partial(self.start_fetch, self.l1, 'Layer 1'))
-        self.timer_l1.start(3000)
-        self.start_fetch(self.l1, 'Layer 1')
-
-
-        # === Dexchange ===
-        self.dexchange = TableWidget(10, 1)
-        self.dexchange.setHorizontalHeaderLabels(['Dex Exchange'])
-        self.dexchange.resizeColumnsToContents()
-        self.layout.addWidget(self.dexchange, 1, 2)
-
-        self.timer_dexchange = QTimer(self)
-        self.timer_dexchange.timeout.connect(partial(self.start_fetch, self.dexchange, 'Dexchange'))
-        self.timer_dexchange.start(3000)
-        self.start_fetch(self.dexchange, 'Dexchange')
-
-
-        # === Liquid staking ===
-        self.liquid_staking = TableWidget()
-        self.liquid_staking.setHorizontalHeaderLabels(['Liquid Staking'])
-        self.liquid_staking.resizeColumnsToContents()
-        self.layout.addWidget(self.liquid_staking, 0, 2)
-
-        self.timer_liquid_staking = QTimer(self)
-        self.timer_liquid_staking.timeout.connect(partial(self.start_fetch, self.liquid_staking, 'Liquid Staking'))
-        self.timer_liquid_staking.start(3000)
-        self.start_fetch(self.liquid_staking, 'Liquid Staking')
-
-
-        # === Layer 0 ===
-        self.l0 = TableWidget()
-        self.l0.setHorizontalHeaderLabels(['Layer 0'])
-        self.l0.resizeColumnsToContents()
-        self.layout.addWidget(self.l0, 2, 0)
-
-        self.timer_l0 = QTimer(self)
-        self.timer_l0.timeout.connect(partial(self.start_fetch, self.l0, 'Layer 0'))
-        self.timer_l0.start(3000)
-        self.start_fetch(self.l0, 'Layer 0')
-
-
-        # === Layer 2 ===
-        self.l2 = TableWidget()
-        self.l2.setHorizontalHeaderLabels(['Layer 2'])
-        self.l2.resizeColumnsToContents()
-        self.layout.addWidget(self.l2, 2, 2)
-
-        self.timer_l2 = QTimer(self)
-        self.timer_l2.timeout.connect(partial(self.start_fetch, self.l2, 'Layer 2'))
-        self.timer_l2.start(3000)
-        self.start_fetch(self.l2, 'Layer 2')
+        self.SetTable('Payments', 0, 0)
+        self.SetTable('Artificial Int', 1, 0)
+        self.SetTable('Meme', 0,1)
+        self.SetTable('Layer 3', 1, 1)
+        self.SetTable('Layer 1', 2, 1)
+        self.SetTable('Dexchange', 1, 2)
+        self.SetTable('Liquid Staking', 0, 2)
+        self.SetTable('Layer 0', 2, 0)
+        self.SetTable('Layer 2', 2, 2)
 
 
 
-        lists = [self.l1, self.l0, self.l2, self.liquid_staking, self.meme, self.ai, self.payments, self.l3, self.dexchange]
+    def SetTable(self, category, x, y):
+        """Create tables for watchlists."""
+        self.category = TableWidget()
+        self.category.resizeColumnsToContents()
+        self.layout.addWidget(self.category, x, y)
 
-        for idx, item in enumerate(lists):
-            item.setItemDelegate(CenteredItemDelegate(item))
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(partial(self.start_fetch, self.category, category))
+        self.timer.start(3000)
+        self.start_fetch(self.category, category)
+        self.category.setItemDelegate(CenteredItemDelegate(self.category))
 
 
     def start_fetch(self, table, category):
@@ -279,7 +110,6 @@ class WatchlistManager(QWidget):
             new_data = {row[0]: row for row in processed}
             current_data = self.table_data[category]
 
-
             if len(new_data) > table.rowCount():
                 table.setRowCount(len(new_data))
 
@@ -288,7 +118,6 @@ class WatchlistManager(QWidget):
                 table.setColumnCount(max_columns)
 
             table.setHorizontalHeaderLabels([category, 'Open', 'High', 'Low', 'Close', 'Volume', "Trades"])
-
 
             table.blockSignals(True)
             for row_idx, (coin, new_row) in enumerate(new_data.items()):

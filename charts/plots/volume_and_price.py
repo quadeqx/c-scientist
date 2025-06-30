@@ -29,7 +29,6 @@ class CandlestickItem(pg.GraphicsObject):
         self.picture = QtGui.QPicture()
         p = QtGui.QPainter(self.picture)
         w = 700
-        print(self.data)
         for row in self.data:
             t = row['Date']
             open_, high, low, close = row['Open'], row['High'], row['Low'], row['Close']

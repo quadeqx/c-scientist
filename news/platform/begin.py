@@ -1,8 +1,10 @@
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QTabWidget
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage
-from PyQt5.QtCore import QUrl
+from PyQt5.QtCore import QUrl, QLoggingCategory
 from PyQt5.QtWebEngineCore import QWebEngineUrlRequestInterceptor
-
+import os
+os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = "--disable-logging --log-level=3"
+QLoggingCategory.setFilterRules("qt.webenginecontext.debug=false")
 
 class AdBlocker(QWebEngineUrlRequestInterceptor):
     """Creates adblocker."""
@@ -12,7 +14,9 @@ class AdBlocker(QWebEngineUrlRequestInterceptor):
         url = info.requestUrl().toString()
         if any(ad in url for ad in [
             "doubleclick.net", "googlesyndication.com", "adservice.google.com",
-            "googletagmanager.com", "ads.yahoo.com", "taboola.com", "outbrain.com"
+            "googletagmanager.com", "ads.yahoo.com", "taboola.com", "outbrain.com",
+            "servedbyadbutler.com", "nexo.go.link", "www.midnight.gd", "news.google.com",
+            "request-global.czilladx.com", "remittix.io"
         ]):
             info.block(True)
 
