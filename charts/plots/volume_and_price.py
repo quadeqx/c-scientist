@@ -66,6 +66,8 @@ class Candle(QtWidgets.QWidget):
         self.plot_widget = CustomPlotWidget()
         self.crosshair = CrosshairHandler(self.plot_widget)
         self.plot_widget.setBackground(QColor(30, 34, 45))
+        self.plot_widget.getAxis('left').setVisible(False)
+        self.plot_widget.getAxis('right').setVisible(True)
         self.plot_widget.setAxisItems({'bottom': pg.DateAxisItem()})
 
 

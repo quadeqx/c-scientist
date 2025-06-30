@@ -64,12 +64,12 @@ class coinprice:
                         logger.error(f"Invalid symbol: {symbol}")
                         continue
                     prices, _ = self.binc.get_uiklines(trading_pair, '1h', limit=1)
-                    watchlist[trading_pair] = prices
+                    watchlist[trading_pair] = prices[0]
                 except Exception as e:
                     logger.error(f"Failed to fetch prices for {trading_pair}: {str(e)}")
 
             logger.info(f"Fetched prices for {key}: {watchlist}")
-            #print('\n\n\n Watchlist data: ', watchlist, '\n\n\n')
+            print(watchlist)
             return watchlist
         except Exception as e:
             logger.error(f"Error fetching watchlist for {key}: {str(e)}")
@@ -78,8 +78,9 @@ class coinprice:
     def prepare_table_data(self, data, key):
         """Prepare data for tabular display."""
         if not data:
+            print('No data')
             return []
-
+        print(data)
         columns = ['open', 'high', 'low', 'close', 'volume', 'number_of_trades']
         table_data = []
         for symbol, values in data.items():
