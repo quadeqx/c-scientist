@@ -3,6 +3,7 @@ from functools import wraps
 import time
 
 def log_request(func):
+    """Log decorator."""
     @wraps(func)
     def wrapper(*args, **kwargs):
         #print(f"[LOG] Calling: {func.__name__} with args: {args[1:]}, kwargs: {kwargs}\n\n")
@@ -12,6 +13,7 @@ def log_request(func):
     return wrapper
 
 def retry(times=3, delay=1):
+    """Retries decorator."""
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
@@ -20,7 +22,7 @@ def retry(times=3, delay=1):
                 try:
                     return func(*args, **kwargs)
                 except Exception as e:
-                    print(f"[RETRY] Attempt {attempt} failed\n\n")
+                    print(f"[RETRY] Attempt {attempt} failed: {e}\n\n")
                     continue
                     last_exception = e
                     time.sleep(delay)
@@ -30,6 +32,7 @@ def retry(times=3, delay=1):
 
 
 def accepts(*types):
+    """Input verification decorator."""
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
@@ -40,7 +43,8 @@ def accepts(*types):
         return wrapper
     return decorator
 
-def returns(expected_type):
+def returns(expected_type, expected_type2):
+    """Return type verification decorator."""
     def decorator(func):
         @wraps(func)
         def wrapper(*args, **kwargs):
@@ -56,6 +60,8 @@ def returns(expected_type):
 
 
 class BinanceClient:
+    """Binance API calls to request market data."""
+
     done = False
     BASE_URL = "https://api.binance.com"
 
@@ -64,9 +70,29 @@ class BinanceClient:
 
     @log_request
     @retry(times=3, delay=2)
-    @returns(dict)
+    #@returns(dict, list)
     @accepts(str, str, int)
     def get_uiklines(self, symbol, interval, limit=999):
+        """
+
+
+        Parameters.
+
+        ----------
+
+        symbol : coin ticker
+            string
+        interval : Candlestick interval
+            integer
+        limit : Number of candlestcks data, optional
+            integer(1-1000). The default is 999.
+
+        Returns
+        -------
+        processed : One ticker price
+            dictionary.
+
+        """
         UIKLINE_KEYS = [
             "open_time", "open", "high", "low", "close", "volume",
             "close_time", "quote_asset_volume", "number_of_trades",
@@ -85,28 +111,13 @@ class BinanceClient:
 
         processed = dict(zip(UIKLINE_KEYS, raw_data[0]))
 
+        plottable = processed = [dict(zip(UIKLINE_KEYS, kline)) for kline in raw_data]
+
         BinanceClient.done = True
 
-        return processed
+        return processed, plottable
 
-    def get_plot(self, symbol, interval, limit):
-        UIKLINE_KEYS = [
-            "open_time", "open", "high", "low", "close", "volume",
-            "close_time", "quote_asset_volume", "number_of_trades",
-            "taker_buy_base", "taker_buy_quote", "ignore"
-        ]
 
-        url = f"{self.BASE_URL}/api/v3/uiKlines"
-        params = {
-            "symbol": symbol.upper(),
-            "interval": interval,
-            "limit": limit
-        }
-        response = self.session.get(url, params=params)
-        response.raise_for_status()
-        raw_data = response.json()
 
-        processed = [dict(zip(UIKLINE_KEYS, kline)) for kline in raw_data]
-        return processed
 
 

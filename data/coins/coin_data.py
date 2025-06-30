@@ -1,22 +1,27 @@
 import logging
-from data import BinanceClient  # Assumes decorators in data/__init__.py
-from logging.handlers import RotatingFileHandler
+from data import BinanceClient
+
 
 # Configure logging
 logger = logging.getLogger(__name__)
+
 logger.setLevel(logging.INFO)
 logger.propagate = False
+"""
 # Create formatter
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 
 # File handler with rotation (1MB per file, keep 3 backups)
-"""
+
+from logging.handlers import RotatingFileHandler
 file_handler = RotatingFileHandler('coin_data.log', maxBytes=1_000_000, backupCount=3)
 file_handler.setLevel(logging.INFO)
 file_handler.setFormatter(formatter)
 logger.addHandler(file_handler)
 """
 class Data:
+    """A dictionary of coin categories."""
+
     def __init__(self):
         self.watchlists = {
             "Payments": ["BTC", "XRP", "BCH", "ARK", "PEPE", "TRX", "DOGE"],
@@ -32,14 +37,18 @@ class Data:
         }
 
     def get_watchlist_by_key(self, key):
+        """Return a list of coins for the given key."""
         return [[item] for item in self.watchlists.get(key, [])]
 
 class coinprice:
+    """Get prices for watchlists."""
+
     def __init__(self):
         self.data = Data()
         self.binc = BinanceClient()
 
     def getprices(self, key):
+        """Query the API for watchlist prices."""
         watchlist = {}
         try:
             pays = self.data.get_watchlist_by_key(key)
@@ -54,7 +63,7 @@ class coinprice:
                     if not isinstance(symbol, str) or not symbol.isalnum():
                         logger.error(f"Invalid symbol: {symbol}")
                         continue
-                    prices = self.binc.get_uiklines(trading_pair, '1h', limit=1)
+                    prices, _ = self.binc.get_uiklines(trading_pair, '1h', limit=1)
                     watchlist[trading_pair] = prices
                 except Exception as e:
                     logger.error(f"Failed to fetch prices for {trading_pair}: {str(e)}")
@@ -67,6 +76,7 @@ class coinprice:
             return watchlist
 
     def prepare_table_data(self, data, key):
+        """Prepare data for tabular display."""
         if not data:
             return []
 

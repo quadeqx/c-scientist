@@ -3,6 +3,8 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtGui import QPixmap
 
 class SplashScreen(QSplashScreen):
+    """Loading splash screen."""
+
     def __init__(self, pixmap):
         super().__init__(pixmap)
         self.setWindowFlag(Qt.WindowType.SplashScreen)
@@ -18,6 +20,7 @@ class SplashScreen(QSplashScreen):
         self.showMessage("Fetching data from Binance...", Qt.AlignmentFlag.AlignBottom | Qt.AlignmentFlag.AlignCenter, Qt.GlobalColor.white)
 
 def show_splash(app, main_window_class):
+    """Show splash screen then the main window."""
     image_path = "authentication/welcome/images/GTR.jpg"
     pixmap = QPixmap(image_path)
     if pixmap.isNull():
