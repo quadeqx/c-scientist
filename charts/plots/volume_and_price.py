@@ -96,8 +96,7 @@ class Candle(QtWidgets.QWidget):
         if self.has_plotted:
             return
         try:
-            raw_data = self.client.get_plot("BTCUSDT", "30m", limit=1000)
-            print(raw_data)
+            _, raw_data = self.client.get_uiklines("BTCUSDT", "30m", limit=1000)
             if not raw_data:
                 return
             processed = preprocess_data(raw_data)

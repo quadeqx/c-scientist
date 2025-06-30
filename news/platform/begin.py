@@ -5,7 +5,10 @@ from PyQt5.QtWebEngineCore import QWebEngineUrlRequestInterceptor
 
 
 class AdBlocker(QWebEngineUrlRequestInterceptor):
+    """Creates adblocker."""
+
     def interceptRequest(self, info):
+        """Ad url interceptor."""
         url = info.requestUrl().toString()
         if any(ad in url for ad in [
             "doubleclick.net", "googlesyndication.com", "adservice.google.com",
@@ -15,16 +18,23 @@ class AdBlocker(QWebEngineUrlRequestInterceptor):
 
 
 class CustomWebEngineView(QWebEngineView):
+    """Creates an instance of pop up blocks."""
+
     def createWindow(self, _type):
-        # Block popups
+        """Block popups."""
         return None
 
 class SilentWebEnginePage(QWebEnginePage):
+    """No console output page."""
+
     def javaScriptConsoleMessage(self, level, message, lineNumber, sourceID):
+        """Silence all javascript console output."""
         pass
 
 
 class News(QWidget):
+    """The news pages instance."""
+
     def __init__(self):
         super().__init__()
 
@@ -36,6 +46,7 @@ class News(QWidget):
         self.interceptor = AdBlocker()
 
         def make_browser(url):
+            """Make a chromium browser using custom settings."""
             view = CustomWebEngineView()
             page = SilentWebEnginePage(self)
             view.setPage(page)

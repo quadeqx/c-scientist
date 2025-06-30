@@ -1,7 +1,9 @@
 from PyQt5 import QtWidgets, QtCore
 
 class CenteredItemDelegate(QtWidgets.QStyledItemDelegate):
+    """Centers cell contents."""
+
     def initStyleOption(self, option, index):
+        """Set the centering."""
         super().initStyleOption(option, index)
-        # Set alignment to center for all cells
         option.displayAlignment = QtCore.Qt.AlignCenter

@@ -13,9 +13,10 @@ import PyQt5
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
-logger.propagate = False
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+logger.propagate = True
 """
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+
 file_handler = RotatingFileHandler('watchlist.log', maxBytes=1_000_000, backupCount=3)
 file_handler.setLevel(logging.INFO)
 file_handler.setFormatter(formatter)
@@ -250,6 +251,7 @@ class WatchlistManager(QWidget):
 
 
     def start_fetch(self, table, category):
+        """Fetch data using threadpolls."""
         if self.fetching[category]:
             logger.debug(f"Fetch already in progress for {category}")
             return
@@ -268,12 +270,15 @@ class WatchlistManager(QWidget):
 
 
     def _update_table(self, table, category, data):
+        print('\n\n\ntrying...\n\n\n\n')
         try:
             processed = self.coinprice.prepare_table_data(data, category)
             logger.info(f"[{id(table)}] Updating table for {category} with data: {processed}")
 
             new_data = {row[0]: row for row in processed}
+
             current_data = self.table_data[category]
+
 
             if len(new_data) > table.rowCount():
                 table.setRowCount(len(new_data))
@@ -303,19 +308,25 @@ class WatchlistManager(QWidget):
 
 
         except Exception as e:
-            logger.error(f"Error updating table for {category}: {str(e)}")
+            print(f"Error updating table for {category}: {str(e)}")
+
 
 
     def closeEvent(self, event):
+        """Close threadpools."""
         self.threadpool.clear()
         self.threadpool.waitForDone()
         super().closeEvent(event)
 
 class FetcherSignals(QObject):
+    """Signal class for fetched data."""
+
     dataFetched = pyqtSignal(dict)
     finished = pyqtSignal()
 
 class DataFetcher(QRunnable):
+    """Fetches the data for the tables."""
+
     def __init__(self, coinprice, category):
         super().__init__()
         self.coinprice = coinprice
@@ -323,6 +334,7 @@ class DataFetcher(QRunnable):
         self.signals = FetcherSignals()
 
     def run(self):
+        """Get the data."""
         try:
             start_time = time.time()
             data = self.coinprice.getprices(self.category)

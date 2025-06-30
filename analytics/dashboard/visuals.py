@@ -1,18 +1,21 @@
 import pyqtgraph as pg
-from pyqtgraph import DateAxisItem, PlotWidget, InfiniteLine
 import PyQt5
-from PyQt5.QtCore import QDate, Qt, QPointF
-from PyQt5.QtGui import QBrush, QColor, QPainter, QFont
-from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QPushButton, QHBoxLayout, QTabWidget, QCalendarWidget, QGridLayout
-import pandas as pd
-from PyQt5.QtGui import QPainter, QBrush, QColor
-import inspect
-import sys
+from PyQt5.QtCore import QDate, Qt
+from PyQt5.QtGui import QColor, QPainter, QFont
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QHBoxLayout, QCalendarWidget, QGridLayout
 from .. import CustomPlotWidget, CrosshairHandler
 
 
 
 class AnalysisWidgets(QWidget):
+    """
+
+    Contains Analysis widgets.
+
+    Creates and modifies the widgets in the section.
+
+    """
+
     def __init__(self):
         super().__init__()
 
@@ -94,27 +97,6 @@ class AnalysisWidgets(QWidget):
         middle.setLayout(mid_horiz)
 
 
-        class CustomCalendar(QCalendarWidget):
-            def __init__(self):
-                super().__init__()
-                self.setVerticalHeaderFormat(QCalendarWidget.NoVerticalHeader)
-
-            def paintCell(self, painter: QPainter, rect, date: QDate):
-
-                # Call base implementation first to draw the default cell
-                super().paintCell(painter, rect, date)
-
-                # Custom paint logic for a specific date
-                if date == QDate(2025, 5, 13):
-                    painter.save()
-                    painter.setClipRect(rect, Qt.IntersectClip)
-                    painter.fillRect(rect, QColor(0, 255, 0, 100))
-                    painter.setPen(Qt.green)
-                    painter.setFont(QFont("Arial", 10, QFont.Normal))
-
-                    text_rect = rect.adjusted(0, 20, 0, 0)
-                    painter.drawText(text_rect, Qt.AlignHCenter | Qt.AlignBottom, "+ 2%")
-                    painter.restore()
 
         calendar = CustomCalendar()
         mid_horiz.addWidget(calendar, stretch=1)
@@ -139,3 +121,49 @@ class AnalysisWidgets(QWidget):
         self.layout.addWidget(bottom, stretch=1)
 
 
+class CustomCalendar(QCalendarWidget):
+    """
+
+    Modifies QCalendarWidget by coloring cells based on profits.
+
+    ---
+
+    """
+
+    def __init__(self):
+        super().__init__()
+        self.setVerticalHeaderFormat(QCalendarWidget.NoVerticalHeader)
+
+    def paintCell(self, painter: QPainter, rect, date: QDate):
+        """
+
+        Parameters.
+
+        ----------
+
+        painter : QPainter
+            QPainter
+        rect : QRect
+            QRect
+        date : QDate
+            QDate
+
+        Returns
+        -------
+        Painted cell
+
+        """
+        # Call base implementation first to draw the default cell
+        super().paintCell(painter, rect, date)
+
+        # Custom paint logic for a specific date
+        if date == QDate(2025, 5, 13):
+            painter.save()
+            painter.setClipRect(rect, Qt.IntersectClip)
+            painter.fillRect(rect, QColor(0, 255, 0, 100))
+            painter.setPen(Qt.green)
+            painter.setFont(QFont("Arial", 10, QFont.Normal))
+
+            text_rect = rect.adjusted(0, 20, 0, 0)
+            painter.drawText(text_rect, Qt.AlignHCenter | Qt.AlignBottom, "+ 2%")
+            painter.restore()

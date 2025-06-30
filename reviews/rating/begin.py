@@ -2,6 +2,8 @@ from PyQt5.QtWidgets import QWidget, QVBoxLayout, QLabel, QHBoxLayout
 from PyQt5.QtCore import Qt
 
 class Reviews(QWidget):
+    """Create the review widget."""
+
     def __init__(self):
         super().__init__()
 

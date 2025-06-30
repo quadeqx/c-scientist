@@ -2,6 +2,8 @@ from PyQt5.QtWidgets import QWidget, QVBoxLayout, QHBoxLayout, QLabel
 from PyQt5.QtCore import Qt
 
 class Chat(QWidget):
+    """The chatbot assistant."""
+
     def __init__(self):
         super().__init__()
         # Initialize the main layout
