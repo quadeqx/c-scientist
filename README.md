@@ -81,7 +81,7 @@ For containerized deployment, refer to the [Docker Setup Guide](README.Docker.md
 appimage-builder --recipe AppImageBuilder.yml
 ```
 
-**To see the logs add** ```bash --log DEBUG``` **flag**
+**To see the logs add** ```--log DEBUG``` **flag**
 
 ## 🛠️ Technologies Used
 
