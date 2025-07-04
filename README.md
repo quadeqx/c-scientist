@@ -75,7 +75,7 @@ c-scientist/
 
 For containerized deployment, refer to the [Docker Setup Guide](README.Docker.md).
 
-## App Image Build
+## 🎁 App Image Build
 **Build using:**
 
 ```bash
