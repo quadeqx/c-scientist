@@ -31,7 +31,7 @@ class WatchlistManager(QWidget):
         self.data_manager = Data()
         self.coinprice = coinprice()
         self.threadpool = QThreadPool.globalInstance()
-        self.threadpool.setMaxThreadCount(12)  # Allow overlap for slow fetches
+        self.threadpool.setMaxThreadCount(10)  # Allow overlap for slow fetches
 
         self.fetching = {
             'Payments': False,
@@ -59,13 +59,13 @@ class WatchlistManager(QWidget):
 
 
         self.SetTable('Payments', 0, 0)
-        self.SetTable('Artificial Int', 1, 0)
         self.SetTable('Meme', 0,1)
-        self.SetTable('Layer 3', 1, 1)
-        self.SetTable('Layer 1', 2, 1)
-        self.SetTable('Dexchange', 1, 2)
         self.SetTable('Liquid Staking', 0, 2)
+        self.SetTable('Artificial Int', 1, 0)
+        self.SetTable('Layer 3', 1, 1)
+        self.SetTable('Dexchange', 1, 2)
         self.SetTable('Layer 0', 2, 0)
+        self.SetTable('Layer 1', 2, 1)
         self.SetTable('Layer 2', 2, 2)
 
 

@@ -16,19 +16,24 @@
 
 ```
 c-scientist/
-├── analytics/          # Modules for data analysis and processing
-├── authentication/     # User authentication and session management
-├── charts/             # Chart generation and visualization tools
-├── chatbot/            # Chatbot integration and response handling
-├── data/               # Data models and database interactions
-├── news/               # News fetching and aggregation
-├── reviews/            # User reviews and feedback management
-├── main.py             # Application entry point
-├── requirements.txt    # Python dependencies
-├── Pipfile             # Project dependencies and scripts
-├── README.Docker.md    # Docker setup instructions
-├── LICENSE             # GPL-2.0 License
-└── .gitignore          # Git ignore rules
+├── analytics/                          # Modules for data analysis and processing
+├── authentication/                     # User authentication and session management
+├── charts/                             # Chart generation and visualization tools
+├── chatbot/                            # Chatbot integration and response handling
+├── data/                               # Data models and database interactions
+├── news/                               # News fetching and aggregation
+├── reviews/                            # User reviews and feedback management
+├── main.py                             # Application entry point
+├── requirements.txt                    # Python dependencies
+├── Pipfile                             # Project dependencies and scripts
+├── README.Docker.md                    # Docker setup instructions
+├── LICENSE                             # GPL-2.0 License
+├── Dockerfile                          # Docker build file
+├── compose.yml                         # Docker params file
+├── favicon.ico                         # App icon
+├── AppImageBuilder.yml                 # Config for building app image
+├── c-scientist-latest-x86_64.AppImage  # App Image
+└── .gitignore                          # Git ignore rules
 ```
 
 ## 🧪 Installation
@@ -69,6 +74,15 @@ c-scientist/
 ## 🐳 Docker Deployment
 
 For containerized deployment, refer to the [Docker Setup Guide](README.Docker.md).
+
+## App Image Build
+**Build using:**
+
+```bash
+appimage-builder --recipe AppImageBuilder.yml
+```
+
+**To see the logs add** ```bash --log DEBUG``` **flag**
 
 ## 🛠️ Technologies Used
 

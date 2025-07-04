@@ -1,0 +1,43 @@
+version: 1
+
+script:
+  - rm -rf AppDir || true
+  - mkdir -p AppDir/usr/src
+  - mkdir -p AppDir/usr/bin
+  - mkdir -p AppDir/usr/lib/python3.10
+
+  - cp main.py AppDir/usr/src/
+  - cp -r analytics authentication charts chatbot data news reviews AppDir/usr/src/
+
+  - cp -r ~/.local/share/virtualenvs/PyQt_Dashboard-deV_j8GW/lib/python3.10/site-packages/PyQt5/Qt5/ AppDir/usr/lib/qt5/
+
+  - cp /usr/bin/python3 AppDir/usr/bin/python3
+  - cp /usr/bin/pip3 AppDir/usr/bin/pip3
+  - cp -r /usr/lib/python3.10/* AppDir/usr/lib/python3.10/
+
+  - AppDir/usr/bin/pip3 install --no-cache-dir --ignore-installed --prefix=/usr --root=AppDir -r requirements.txt
+
+AppDir:
+  path: ./AppDir
+  app_info:
+    id: "1"
+    name: c-scientist
+    icon: application-vnd.appimage
+    version: latest
+    exec: usr/bin/python3
+    exec_args: "$APPDIR/usr/src/main.py $@"
+
+  runtime:
+    env:
+      QTWEBENGINE_DISABLE_SANDBOX: "1"
+      PYTHONHOME: '${APPDIR}/usr'
+      PYTHONPATH: '${APPDIR}/usr/lib/python3.10/site-packages:${APPDIR}/usr/src'
+      QTWEBENGINEPROCESS_PATH: '${APPDIR}/usr/lib/qt5/libexec/QtWebEngineProcess'
+      QTWEBENGINE_RESOURCES_PATH: '${APPDIR}/usr/lib/qt5/resources'
+      QTWEBENGINE_LOCALES_PATH: '${APPDIR}/usr/lib/qt5/translations/qtwebengine_locales'
+      QT_QPA_PLATFORM: xcb
+      QT_LOGGING_RULES: qt5.debug=true;qt5.stylesheet=true
+
+AppImage:
+  arch: x86_64
+  update-information: none

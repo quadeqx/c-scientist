@@ -1,7 +1,18 @@
 FROM python:3.10-slim
 
 # Install system dependencies including X11 and Qt requirements
-RUN apt-get update && apt-get install -y     libgl1-mesa-glx     libglib2.0-0     libx11-6     libxext6     libxcb1     libxkbcommon-x11-0     libx11-xcb1     libxrender1     libxi6     libqt5gui5     && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y \
+ libnss3 \
+ libgl1-mesa-glx \
+ libglib2.0-0     \
+ libx11-6     \
+ libxext6     \
+ libxcb1     \
+ libxkbcommon-x11-0     \
+ libx11-xcb1     \
+ libxrender1     \
+ libxi6     \
+ libqt5gui5     && rm -rf /var/lib/apt/lists/*
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1     PYTHONUNBUFFERED=1

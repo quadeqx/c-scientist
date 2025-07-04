@@ -45,6 +45,36 @@ class News(QWidget):
         self.layout = QVBoxLayout(self)
         self.layout.setContentsMargins(0, 0, 0, 0)
         self.tab = QTabWidget()
+        self.tab.tabBar().setExpanding(True)
+        self.tab.setStyleSheet("""
+            QTabWidget::pane {
+                border: none;
+            }
+
+            QTabBar {
+                qproperty-drawBase: 0;
+                alignment: center;
+            }
+
+            QTabBar::tab {
+                background: #222;
+                color: white;
+                padding: 8px 20px;
+                margin: 6px;
+                border-radius: 16px;
+                font-weight: bold;
+            }
+
+            QTabBar::tab:selected {
+                background: #005f99;
+                color: white;
+            }
+
+            QTabBar::tab:hover {
+                background: #444;
+            }
+        """)
+
         self.layout.addWidget(self.tab)
 
         self.interceptor = AdBlocker()
