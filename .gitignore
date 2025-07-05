@@ -1,0 +1,4 @@
+.git
+.spyproject
+*/migrations
+.env
