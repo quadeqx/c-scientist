@@ -11,9 +11,13 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
+import os
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+load_dotenv(BASE_DIR / ".env", override=True)
 
 
 # Quick-start development settings - unsuitable for production
@@ -96,20 +100,25 @@ WSGI_APPLICATION = 'authentication.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
+load_dotenv(BASE_DIR / ".env")
+
+print("DATABASE:", {
+    'NAME': os.getenv("NAME"),
+    'USER': os.getenv("USER"),
+    'PASSWORD': os.getenv("PASSWORD"),
+})
+
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'finlingo',
-        'USER': 'postgres',
-        'PORT': 5432,
-        'PASSWORD': 'postgres',
-        'HOST': 'localhost',
-
-
+        'ENGINE': os.getenv("ENGINE", "django.db.backends.postgresql"),
+        'NAME': os.getenv("NAME"),
+        'USER': os.getenv("USER"),
+        'PASSWORD': os.getenv("PASSWORD"),
+        'HOST': os.getenv("HOST", "localhost"),
+        'PORT': os.getenv("PORT", "5432"),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
