@@ -111,10 +111,11 @@ class Candle(QtWidgets.QWidget):
         self.processed = []
         self.has_plotted = False
         self.current_price_line = None
+        self.new_time = "30m"
 
         # Setup worker thread
         self.thread = QThread()
-        self.worker = DataWorker(self.client, self.current_coin, "30m", 1)
+        self.worker = DataWorker(self.client, self.current_coin, self.new_time, 1)
         self.worker.moveToThread(self.thread)
         self.thread.started.connect(self.worker.fetch_data)
         self.worker.data_fetched.connect(self.update_candles_with_data)
@@ -126,32 +127,52 @@ class Candle(QtWidgets.QWidget):
         self.timer.timeout.connect(self.start_worker)
         self.timer.start(1000)
 
+
+        def combobox(placeholder: str, data: list, connector):
+            combobox = QComboBox(self.plot_widget)
+            combobox.setEditable(True)
+            combobox.setPlaceholderText(placeholder)
+            combobox.addItems(data)
+            combobox.setCurrentIndex(0)
+            combobox.setFixedSize(110, 30)
+            combobox.setMaxVisibleItems(15)
+            pallet = combobox.palette()
+            pallet.setColor(QPalette.Base, QColor(30, 34, 45))
+            pallet.setColor(QPalette.Button, QColor(30, 34, 45))
+            combobox.setPalette(pallet)
+            combobox.view().setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+            combobox.activated[str].connect(connector)
+            combobox.lineEdit().editingFinished.connect(connector)
+            return combobox
+
+        self.time = combobox("Time frame", ["5m", "15m", "30m", "1h", "2h", "4h", "8h", "12h", "1d", "1w"], self.timeframe_changed)
+        self.time.move(114,0)
         data = Data().watchlists
-        self.combobox = QComboBox(self.plot_widget)
-        self.combobox.setEditable(True)
-        self.combobox.setPlaceholderText('Select coin')
-        self.combobox.addItems([item for values in data.values() for item in values])
-        self.combobox.setCurrentIndex(0)
-        self.combobox.setFixedSize(110, 30)
-        self.combobox.setMaxVisibleItems(15)
-        pallet = self.combobox.palette()
-        pallet.setColor(QPalette.Base, QColor(30, 34, 45))
-        pallet.setColor(QPalette.Button, QColor(30, 34, 45))
-        self.combobox.setPalette(pallet)
-        self.combobox.view().setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.combobox.activated[str].connect(self.on_coin_changed)
-        self.combobox.lineEdit().editingFinished.connect(self.on_coin_changed)
+        self.select_coin = combobox("Select a coin", [item for values in data.values() for item in values], self.on_coin_changed)
+
 
         self.layout.addWidget(self.plot_widget)
         self.setLayout(self.layout)
 
         QtCore.QTimer.singleShot(0, self.plot_candlesticks)
 
+    def timeframe_changed(self):
+        self.new_time = self.time.currentText().strip()
+        if not self.new_time or self.time.currentIndex() == 0:
+            self.new_time = "30m"
+        logging.info(f"Timeframe changed to: {self.new_time}")
+        self.has_plotted = False
+        self.timer.stop()  # Stop updates
+        self.plot_candlesticks()  # Replot with new coin
+        self.plot_widget.getViewBox().autoRange()
+        self.timer.start(2000)  # Restart updates
+
     def start_worker(self):
         """Start the worker thread to fetch data."""
         if self.thread.isRunning():
             return  # Avoid starting a new thread if one is already running
         self.worker.coin = self.current_coin  # Update coin for worker
+        self.worker.time = self.new_time
         self.thread.start()
 
     def update_candles_with_data(self, stripped_data):
@@ -195,8 +216,8 @@ class Candle(QtWidgets.QWidget):
 
     def on_coin_changed(self):
         """Handle coin selection change."""
-        selected_text = self.combobox.currentText().strip()
-        if not selected_text or self.combobox.currentIndex() == 0:
+        selected_text = self.select_coin.currentText().strip()
+        if not selected_text or self.select_coin.currentIndex() == 0:
             selected_text = "BTC"
         self.current_coin = selected_text + "USDT"
         logging.info(f"Coin changed to: {self.current_coin}")
@@ -210,7 +231,7 @@ class Candle(QtWidgets.QWidget):
         if self.has_plotted:
             return
         try:
-            _, raw_data = self.client.get_uiklines(self.current_coin, "30m", limit=10)
+            _, raw_data = self.client.get_uiklines(self.current_coin, self.new_time, limit=1000)
             if not raw_data:
                 QtWidgets.QMessageBox.warning(self, "Error", f"No data for {self.current_coin}")
                 return
