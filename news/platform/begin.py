@@ -59,7 +59,7 @@ class News(QWidget):
             QTabBar::tab {
                 background: #222;
                 color: white;
-                padding: 8px 20px;
+                padding: 8px 25px;
                 margin: 6px;
                 border-radius: 16px;
                 font-weight: bold;

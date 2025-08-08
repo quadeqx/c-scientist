@@ -12,6 +12,8 @@ from PyQt5.QtWidgets import QMainWindow, QTabWidget, QWidget, QHBoxLayout, QPush
 from PyQt5 import QtWidgets
 from data import BinanceClient
 import requests
+from data.calculators.options_calculators import Option_calculators
+from authentication.welcome.splash import resource_path
 
 new = requests
 
@@ -25,7 +27,7 @@ class CryptoDashboard(QMainWindow):
 
 
         self.setWindowTitle("Crypto Dashboard")
-        self.setWindowIcon(QIcon('favicon.ico'))
+        self.setWindowIcon(QIcon(resource_path('authentication/welcome/images/favicon.png')))
         self.resize(1600, 900)
 
         self.main_widget = QWidget()
@@ -48,6 +50,7 @@ class CryptoDashboard(QMainWindow):
         self.news = News()
         self.reviews = Reviews()
         self.watchlists = WatchlistManager()
+        self.options_calculators = Option_calculators()
 
         self.tab.addTab(self.chart, "Charts")
         self.tab.addTab(self.analysis, "Analytics")
@@ -55,6 +58,7 @@ class CryptoDashboard(QMainWindow):
         self.tab.addTab(self.news, "News")
         self.tab.addTab(self.reviews, "Reviews")
         self.tab.addTab(self.watchlists, "Watchlist")
+        self.tab.addTab(self.options_calculators, "Option Calculator")
 
         self.main_layout.addWidget(self.tab)
 
@@ -124,6 +128,11 @@ class CryptoDashboard(QMainWindow):
         watchlist_button.setFixedSize(100, 30)
         watchlist_button.clicked.connect(lambda: self.tab.setCurrentIndex(5))
         tab_layout.addWidget(watchlist_button)
+
+        calculators_button = QPushButton("Options Calculators")
+        calculators_button.setFixedSize(120, 30)
+        calculators_button.clicked.connect(lambda: self.tab.setCurrentIndex(6))
+        tab_layout.addWidget(calculators_button)
 
         header_layout.addWidget(tab_bar)
 
@@ -220,6 +229,7 @@ if __name__ == "__main__":
                 QTimer.singleShot(500, splash.close)
             elif not shown:
                 QTimer.singleShot(100, check_data_loaded)
+                parent.show()
                 app.processEvents()
         except AttributeError:
             if not shown:

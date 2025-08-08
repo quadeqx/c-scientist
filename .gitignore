@@ -5,7 +5,8 @@
 *.pyo
 .spyproject
 *.log*
-c-scientist-latest-x86_64.AppImage.zsync
+c-scientist-*
 lookup?op=get
 AppDir
 appimage-build
+entry.desktop

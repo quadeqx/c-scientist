@@ -1,4 +1,5 @@
 from PyQt5.QtWidgets import QWidget, QGridLayout, QTableWidgetItem
+import pyqtgraph
 from pyqtgraph import TableWidget
 from PyQt5.QtCore import pyqtSignal, QObject, QRunnable, QThreadPool, QTimer
 from data.coins.coin_data import coinprice, Data
