@@ -229,7 +229,6 @@ if __name__ == "__main__":
                 QTimer.singleShot(500, splash.close)
             elif not shown:
                 QTimer.singleShot(100, check_data_loaded)
-                parent.show()
                 app.processEvents()
         except AttributeError:
             if not shown:
