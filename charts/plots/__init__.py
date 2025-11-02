@@ -25,10 +25,13 @@ class Essentials(QObject):
 
     def __init__(self):
         super().__init__()
+        self.value = 900
+
 
     @pyqtSlot(float)
     def width_getter(self, width_value):
         logging.info(f"{Fore.RED}We're getting something {width_value} {Style.RESET_ALL}")
+        self.value = width_value
 
         self.width.emit(width_value)
 
@@ -39,21 +42,20 @@ class CandlestickItem(pg.GraphicsObject):
         self.width = None
         self.data = data
         self.essentials = essentials
-        self.essentials.width.connect(self.width_obtainer)
         self.generatePicture()
 
 
     @pyqtSlot(float)
     def width_obtainer(self, val: float):
         self.width = val
-        logger.info(f"{Fore.GREEN} The emitted width is {self.width}----------------------{Style.RESET_ALL}")
+        logger.info(f"{Fore.GREEN} The emitted width is {self.width} {Style.RESET_ALL}")
 
 
     def generatePicture(self):
-        logger.info(f"{Fore.BLUE} We've gotten {self.width} as our width. {Style.RESET_ALL}")
+        logger.info(f"{Fore.BLUE} We've gotten {self.essentials.value} as our width. {Style.RESET_ALL}")
         self.picture = QtGui.QPicture()
         p = QtGui.QPainter(self.picture)
-        self.w  = 1800 *0.45
+        self.w  = self.essentials.value *0.45
         t = self.data['Date']
         open_, high, low, close = self.data['Open'], self.data['High'], self.data['Low'], self.data['Close']
 

@@ -43,8 +43,10 @@ class DataWorker(QObject):
     @pyqtSlot()
     def emitter(self):
         if not self._burst_done:
-            _, raw = self.client.get_uiklines(self._coin, self._interval, limit= 100)
-            self.width_emitted.emit(858765548585.565158414)
+            _, raw = self.client.get_uiklines(self._coin, self._interval, limit= 5)
+            width = int(raw[-1]["open_time"] - raw[-2]["open_time"]) / 1000
+            logger.info(f"{Fore.GREEN} {width} {Style.RESET_ALL}")
+            self.width_emitted.emit(width)
             preprocessed = preprocess_data(raw)
             for u in preprocessed:
                 logger.info(f"Emitted {u} for updates..........")
