@@ -1,4 +1,8 @@
+import logging
 import sys
+import os
+os.environ["QTWEBENGINE_CHROMIUM_FLAGS"] = "--no-sandbox --disable-gpu --disable-software-rasterizer"
+os.environ["QT_OPENGL"] = "software"
 from PyQt5.QtCore import Qt, QTimer
 from chatbot.bot.chat import Chat
 from news.platform.begin import News
@@ -7,7 +11,7 @@ from PyQt5.QtGui import QIcon, QPalette, QColor
 from data.watchlists.list1 import WatchlistManager
 from authentication.welcome.splash import show_splash
 from analytics.dashboard.visuals import AnalysisWidgets
-from charts.plots.volume_and_price import Candle
+from charts.plots.main_chart import Candle
 from PyQt5.QtWidgets import QMainWindow, QTabWidget, QWidget, QHBoxLayout, QPushButton, QVBoxLayout, QSizePolicy, QLabel
 from PyQt5 import QtWidgets
 from data import BinanceClient
@@ -15,7 +19,13 @@ import requests
 from data.calculators.options_calculators import Option_calculators
 from authentication.welcome.splash import resource_path
 
+logging.basicConfig(
+    level=logging.INFO,
+    format='[%(asctime)s.%(msecs)03d] [%(levelname)s] [%(threadName)s:%(thread)d] %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
 new = requests
+
 
 class CryptoDashboard(QMainWindow):
     def __init__(self):

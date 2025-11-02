@@ -4,25 +4,16 @@ from pyqtgraph import TableWidget
 from PyQt5.QtCore import pyqtSignal, QObject, QRunnable, QThreadPool, QTimer
 from data.coins.coin_data import coinprice, Data
 from functools import partial
-import logging
 import time
 from data.watchlists import CenteredItemDelegate
 from logging.handlers import RotatingFileHandler
 import PyQt5
 
-# Configure logging
-
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+import logging
 logger = logging.getLogger(__name__)
-logger.propagate = False
-"""
-formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+logger.disabled = True
 
-file_handler = RotatingFileHandler('watchlist.log', maxBytes=1_000_000, backupCount=3)
-file_handler.setLevel(logging.INFO)
-file_handler.setFormatter(formatter)
-logger.addHandler(file_handler)
-"""
+
 class WatchlistManager(QWidget):
     """Watchlist management class."""
 

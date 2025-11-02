@@ -3,7 +3,8 @@ FROM python:3.10-slim
 # Install system dependencies including X11 and Qt requirements
 RUN apt-get update && apt-get install -y \
  libnss3 \
- libgl1-mesa-glx \
+ libgl1 \
+ libasound2 \
  libglib2.0-0     \
  libx11-6     \
  libxext6     \
@@ -16,6 +17,7 @@ RUN apt-get update && apt-get install -y \
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE=1     PYTHONUNBUFFERED=1
+
 
 # Set work directory
 WORKDIR /app
